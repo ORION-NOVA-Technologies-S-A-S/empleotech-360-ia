@@ -27,7 +27,7 @@ jobs:
         working-directory: frontend
         env:
           VITE_MODO_DEMO: "true"
-          VITE_BASE: /${{ github.event.repository.name }}/
+          VITE_BASE: /
         run: |
           npm install
           npm run build
