@@ -1,39 +1,60 @@
 """Analítica de datos: DANE, brechas, rutas, vacantes, VR y panel de ORI."""
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from .. import db
+from ..datos import carrera_por_id, carreras, departamentos
 from ..security import requiere_rol, usuario_actual
 from ..services import mercado
 
 router = APIRouter(prefix="/api", tags=["Datos y analítica"])
 
 
-class Competencias(BaseModel):
-    competencias: list[str] = []
-    territorio: str = "Neiva"
+class Consulta(BaseModel):
+    competencias: list[str] = Field(default_factory=list, max_length=60)
+    carrera_id: str | None = Field(None, max_length=80)
+    departamento: str | None = Field(None, max_length=60)
+    municipio: str | None = Field(None, max_length=60)
+    territorio: str | None = Field(None, max_length=60)
 
 
-@router.get("/dane/indicadores")
-async def indicadores(territorio: str = "Neiva"):
-    return await mercado.indicadores(territorio)
+def _territorios(c: Consulta) -> list[str]:
+    return mercado.territorios_de(c.municipio, c.departamento, c.territorio)
+
+
+@router.get("/carreras")
+async def listar_carreras():
+    return carreras()
+
+
+@router.get("/territorios")
+async def listar_territorios():
+    return departamentos()
+
+
+@router.get("/dane/consulta")
+async def dane(departamento: str | None = None, municipio: str | None = None):
+    return await mercado.consulta_dane(departamento, municipio)
 
 
 @router.get("/mercado/demanda")
-async def demanda(territorio: str = "Neiva"):
-    return await mercado.demanda_territorio(territorio)
+async def demanda(territorio: str = "Nacional"):
+    return await mercado.demanda_lista(mercado.territorios_de(territorio=territorio))
 
 
 @router.post("/brechas")
-async def brechas(c: Competencias):
-    r = await mercado.calcular_brechas(c.competencias, c.territorio)
+async def brechas(c: Consulta):
+    carrera = carrera_por_id(c.carrera_id)
+    if c.carrera_id and not carrera:
+        raise HTTPException(404, "Carrera no encontrada.")
+    r = await mercado.calcular_brechas(c.competencias, _territorios(c), carrera)
     r["ruta"] = await mercado.ruta_para(r["brechas"])
     return r
 
 
 @router.post("/vacantes/emparejar")
-async def vacantes(c: Competencias):
-    return await mercado.emparejar_vacantes(c.competencias, c.territorio)
+async def vacantes(c: Consulta):
+    return await mercado.emparejar_vacantes(c.competencias, _territorios(c))
 
 
 @router.get("/cursos")

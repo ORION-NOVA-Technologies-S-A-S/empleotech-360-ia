@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { api } from '../api.js'
 import { OriAvatar } from '../components/Avatares.jsx'
 import Chat from '../components/Chat.jsx'
+import { CONSEJOS_ORI, gesto, hablar } from '../components/vida.js'
 
 const CAPAS = [
   ['🔐', 'Contraseñas Argon2id', 'Las claves nunca se guardan en texto; se exige longitud y variedad.'],
@@ -17,15 +18,18 @@ const CAPAS = [
 export default function Seguridad({ usuario }) {
   const [eventos, setEventos] = useState([])
   useEffect(() => { if (usuario?.rol === 'admin') api('/seguridad/eventos').then(setEventos).catch(() => {}) }, [usuario])
+  const [consejo, setConsejo] = useState('Tócame y te doy un consejo de seguridad.')
+  const tocar = () => { const t = CONSEJOS_ORI[Math.floor(Math.random() * CONSEJOS_ORI.length)]; setConsejo(t); gesto('ori', 'tilt'); gesto('ori', 'flap'); hablar(t, 'ori') }
   const graves = eventos.filter((e) => ['alta', 'critica'].includes(e.severidad)).length
 
   return (
     <section>
       <div className="ori-cabecera">
-        <OriAvatar size={150} alerta={graves > 0} />
+        <OriAvatar size={150} alerta={graves > 0} onClick={tocar} />
         <div>
           <h1>ORI SECURITY</h1>
-          <p className="lead">El búho guardián de Orion Nova Technologies protege la plataforma y te enseña a buscar empleo sin caer en fraudes.</p>
+          <p className="lead">El búho guardián de ORION CORE protege la plataforma y te enseña a buscar empleo sin caer en fraudes.</p>
+          <p className="burbuja-personaje" aria-live="polite"><b>ORI:</b> {consejo}</p>
         </div>
       </div>
       <div className="tarjetas">

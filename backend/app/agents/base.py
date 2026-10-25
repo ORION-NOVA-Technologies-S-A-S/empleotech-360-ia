@@ -13,6 +13,10 @@ class Contexto:
     datos: dict[str, Any] = field(default_factory=dict)  # datos extra que envía el frontend
 
     @property
+    def territorios(self) -> list[str]:
+        return [t for t in (self.datos.get("municipio"), self.datos.get("departamento"), self.territorio, "Nacional") if t]
+
+    @property
     def competencias(self) -> list[str]:
         comp = self.datos.get("competencias") or self.perfil.get("competencias") or []
         return [c.strip() for c in comp if c and c.strip()]

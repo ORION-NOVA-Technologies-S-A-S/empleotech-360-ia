@@ -30,16 +30,21 @@ create table if not exists perfiles (
 
 -- ---------- Datos del mercado laboral (DANE / GEIH) ----------
 create table if not exists indicadores_dane (
-  id          serial primary key,
-  periodo     date not null,
-  territorio  text not null,              -- 'Nacional', 'Huila', 'Neiva', ...
-  grupo       text not null,              -- 'Total', 'Jóvenes 15-28', 'Mujeres jóvenes', ...
-  indicador   text not null,              -- 'TD' (desempleo), 'TO' (ocupación), 'TGP', 'Informalidad', 'NiNi'
-  valor       numeric not null,
-  unidad      text not null default '%',
-  fuente      text not null default 'DANE - GEIH',
-  es_ejemplo  boolean not null default true,
-  unique (periodo, territorio, grupo, indicador)
+  id             serial primary key,
+  periodo        date not null,
+  periodo_nombre text not null default '',     -- 'Año 2025', 'Oct–dic 2025', 'May–jul 2026'
+  nivel          text not null default 'Nacional' check (nivel in ('Nacional','Departamento','Municipio')),
+  territorio     text not null,                -- 'Nacional', 'Huila', 'Neiva', ...
+  departamento   text,                         -- departamento al que pertenece (municipios)
+  grupo          text not null,                -- 'Total', 'Jóvenes 15-28', ...
+  indicador      text not null,                -- 'TD' (desocupación), 'TO', 'TGP', 'Informalidad', 'NiNi'
+  valor          numeric not null,
+  unidad         text not null default '%',
+  fuente         text not null default 'DANE - GEIH',
+  url            text,
+  nota           text,
+  es_ejemplo     boolean not null default false,
+  unique (periodo, nivel, territorio, grupo, indicador)
 );
 
 create table if not exists competencias_demandadas (

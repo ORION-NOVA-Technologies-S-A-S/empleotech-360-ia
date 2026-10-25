@@ -5,13 +5,13 @@
  * de los 17 agentes. En producción se usa el backend FastAPI + PostgreSQL/Supabase.
  */
 import D from './datos.js'
+import { CARRERAS, DEPARTAMENTOS, brechas, carreraPorId, consultaDane, conversarNova, demandaLista, detectarTerritorio, emparejar, rutaPara, valor } from './logica.js'
 
 const norm = (t) => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
 const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem('etdemo_' + k)) ?? d } catch { return d } },
   set(k, v) { try { localStorage.setItem('etdemo_' + k, JSON.stringify(v)) } catch {} },
 }
-const AVISO = ' (Atención: son datos de EJEMPLO; el administrador debe cargar las fuentes oficiales.)'
 const err = (status, detail) => { const e = new Error(detail); e.status = status; throw e }
 
 // ---------------- ORI SECURITY ----------------
@@ -26,36 +26,10 @@ function auditar(evento, severidad = 'info', detalle = {}) {
   store.set('eventos', ev.slice(0, 200))
 }
 
-// ---------------- Analítica ----------------
-function demanda(territorio) {
-  const m = new Map()
-  for (const d of D.competencias_demandadas.filter((x) => [territorio, 'Huila', 'Nacional'].includes(x.territorio))) {
-    const a = m.get(d.competencia)
-    m.set(d.competencia, a ? { ...a, demanda: Math.max(a.demanda, d.demanda), tendencia: Math.max(a.tendencia, d.tendencia), sector: a.sector > d.sector ? a.sector : d.sector }
-      : { competencia: d.competencia, sector: d.sector, demanda: d.demanda, tendencia: d.tendencia, es_ejemplo: true })
-  }
-  return [...m.values()].sort((a, b) => b.demanda - a.demanda)
-}
-function brechas(competencias, territorio) {
-  const dem = demanda(territorio), propias = new Set(competencias.map(norm))
-  const tiene = dem.filter((d) => propias.has(norm(d.competencia)))
-  const faltan = dem.filter((d) => !propias.has(norm(d.competencia))).map((f) => ({ ...f, prioridad: Math.round((f.demanda + 0.5 * f.tendencia) * 10) / 10 }))
-  faltan.sort((a, b) => b.prioridad - a.prioridad)
-  const total = dem.reduce((s, d) => s + d.demanda, 0) || 1
-  return { territorio, cobertura: Math.round((1000 * tiene.reduce((s, d) => s + d.demanda, 0)) / total) / 10, tiene, brechas: faltan, es_ejemplo: true }
-}
-const NIVEL = { 'básico': 1, intermedio: 2, avanzado: 3 }
-const rutaPara = (br, lim = 5) => br.slice(0, lim).map((b) => ({ competencia: b.competencia, prioridad: b.prioridad,
-  cursos: D.cursos.filter((c) => c.competencia === b.competencia).sort((a, c) => (c.gratuito - a.gratuito) || (NIVEL[a.nivel] - NIVEL[c.nivel])) }))
-function emparejar(competencias, territorio) {
-  const propias = new Set(competencias.map(norm))
-  return D.vacantes.filter((v) => [territorio, 'Huila', 'Remoto'].includes(v.territorio)).map((v) => {
-    const coinciden = v.competencias.filter((c) => propias.has(norm(c)))
-    return { ...v, afinidad: Math.round((100 * coinciden.length) / v.competencias.length), coinciden, faltan: v.competencias.filter((c) => !coinciden.includes(c)) }
-  }).sort((a, b) => b.afinidad - a.afinidad)
-}
-const indicadores = (t) => D.indicadores_dane.filter((i) => [t, 'Nacional'].includes(i.territorio))
-  .sort((a, b) => a.periodo.localeCompare(b.periodo) || a.territorio.localeCompare(b.territorio))
+// ---------------- Analítica (lógica compartida) ----------------
+const territoriosDe = (b) => [b.municipio, b.departamento, b.territorio, 'Nacional'].filter(Boolean)
+const AVISO_DEM = ' (El índice de demanda por competencia es de EJEMPLO hasta conectar fuentes de vacantes.)'
+const pct = (f) => (f ? `${String(f.valor).replace('.', ',')}%` : '—')
 
 // ---------------- Los 17 agentes ----------------
 const BANCO = {
@@ -68,25 +42,34 @@ const SINONIMOS = { python: 'Programación Python', react: 'JavaScript / React',
 const lista = (arr) => arr.map((x) => '• ' + x).join('\n')
 
 const AGENTES = [
-  ['nova', 'NOVA · Asistente humanoide', 'Inteligencia artificial', '🤖', 'Orquestadora: conversa con el joven y lo dirige al agente experto que necesita.', () => ({
-    texto: '¡Hola! Soy NOVA 🤖, tu asistente de EmpleoTech 360 IA. Puedo mostrarte las brechas laborales de tu región con datos del DANE, armarte una ruta de aprendizaje, buscarte vacantes, prepararte para entrevistas y practicar en realidad virtual. ¿Por dónde empezamos?',
-    datos: { sugerencias: ['¿Qué competencias me faltan?', 'Muéstrame el desempleo juvenil', 'Búscame vacantes', 'Prepárame para una entrevista'] } })],
+  ['nova', 'NOVA · Asistente humanoide', 'Inteligencia artificial', '🤖', 'Conversa contigo, te recuerda y te lleva al agente experto que necesitas.', (ctx, msg) => (
+    conversarNova(msg, ctx.datos) || {
+      texto: `Mmm, no estoy segura de haberte entendido${ctx.datos.nombre ? ', ' + ctx.datos.nombre : ''}. 🤔 Puedes contarme qué estudias, preguntarme por el desempleo de tu departamento, pedirme vacantes o una ruta de cursos.`,
+      datos: { sugerencias: ['¿Qué puedes hacer?', 'Estudio ingeniería de sistemas', 'Desempleo en el Huila', 'Búscame vacantes'] } })],
   ['ori', 'ORI SECURITY · Ciberseguridad', 'Ciberseguridad', '🦉', 'Protege la plataforma y enseña a los jóvenes a detectar ofertas falsas y fraudes.', (ctx, msg) => {
     const senales = ['pago', 'consigna', 'adelanto', 'whatsapp', 'urgente', 'sin experiencia gana'].filter((s) => norm(msg).includes(s))
     let t = '🦉 Reglas de ORI para buscar empleo seguro:\n1. Ninguna empresa seria te cobra por entrevistarte, capacitarte o contratarte.\n2. Desconfía de salarios muy altos sin experiencia y de la prisa.\n3. Verifica la empresa en el RUES y que el correo sea de su dominio.\n4. Nunca envíes fotos de tu cédula ni claves por chat.\n5. Usa contraseñas largas y activa la verificación en dos pasos.'
     if (senales.length) t = `⚠️ Detecté señales de posible fraude: ${senales.join(', ')}.\n\n` + t
     return { texto: t, datos: { senales_fraude: senales } }
   }],
-  ['dane', 'Analista DANE del mercado laboral', 'Analítica', '📊', 'Lee los indicadores de la GEIH del DANE (desempleo, informalidad, ninis) por territorio.', (ctx) => {
-    const ind = indicadores(ctx.territorio), ult = ind.reduce((a, b) => (a > b.periodo ? a : b.periodo), '')
-    return { texto: `Indicadores del mercado laboral, periodo ${ult}:\n` + lista(ind.filter((i) => i.periodo === ult).map((i) => `${i.indicador} ${i.grupo} (${i.territorio}): ${i.valor}%`)) + AVISO, datos: { indicadores: ind } }
+  ['dane', 'Analista DANE del mercado laboral', 'Analítica', '📊', 'Explica los indicadores oficiales de la GEIH del DANE: nacional, departamentos y ciudades.', (ctx, msg) => {
+    const t = norm(msg)
+    const { departamento: dep, municipio: mun } = detectarTerritorio(msg, ctx.datos.departamento, ctx.datos.municipio)
+    const c = consultaDane(dep, mun)
+    const L = [`🇨🇴 Nacional: desempleo ${pct(valor(c.nacional, 'TD'))} en 2025; jóvenes de 15 a 28 años ${pct(valor(c.nacional, 'TD', 'Jóvenes 15-28'))} (may–jul 2026); el ${pct(valor(c.nacional, 'NiNi', 'Jóvenes 15-28'))} de los jóvenes ni estudia ni trabaja.`]
+    if (c.departamento.length) L.push(`📍 ${dep}: desempleo ${pct(valor(c.departamento, 'TD'))}, ocupación ${pct(valor(c.departamento, 'TO'))} y participación ${pct(valor(c.departamento, 'TGP'))} (año 2025).`)
+    if (c.municipio.length) L.push(`🏙️ ${mun}: desempleo ${pct(valor(c.municipio, 'TD'))} (oct–dic 2025).${c.municipio[0].nota ? ' ' + c.municipio[0].nota : ''}`)
+    if (!dep) L.push('Dime tu departamento o municipio y te muestro sus cifras. Ejemplo: «desempleo en el Huila».')
+    return { texto: L.concat(c.avisos).join('\n') + '\nFuente: DANE – GEIH.', datos: { ...c, acciones: [{ label: 'Ver gráficos DANE', href: '#/dane' }] } }
   }],
-  ['brechas', 'Detector de brechas laborales', 'Analítica', '🎯', 'Compara tus competencias con las que pide el mercado de tu territorio.', (ctx) => {
-    const r = brechas(ctx.competencias, ctx.territorio)
-    let t = `Tu cobertura frente a la demanda de ${ctx.territorio} es ${r.cobertura}%. Tus 5 brechas prioritarias:\n` +
-      r.brechas.slice(0, 5).map((b, i) => `${i + 1}. ${b.competencia} (demanda ${b.demanda}, crece +${b.tendencia}%)`).join('\n') + AVISO
-    if (!ctx.competencias.length) t = 'Aún no me has dicho tus competencias, así que tomo todas como brecha. ' + t
-    return { texto: t, datos: r }
+  ['brechas', 'Detector de brechas laborales', 'Analítica', '🎯', 'Compara el perfil de tu carrera y tus competencias con lo que pide el mercado.', (ctx) => {
+    const carrera = carreraPorId(ctx.datos.carrera)
+    const r = brechas({ competencias: ctx.competencias, carrera, territorios: territoriosDe({ ...ctx.datos, territorio: ctx.territorio }) })
+    let t = (carrera ? `Para ${carrera.nombre}, ` : 'Frente a la demanda general, ') + `tu cobertura es ${r.cobertura}%. Tus 5 brechas prioritarias:\n` +
+      r.brechas.slice(0, 5).map((b, i) => `${i + 1}. ${b.competencia} (${b.tipo.toLowerCase()})`).join('\n') + AVISO_DEM
+    if (!ctx.competencias.length) t = 'Aún no me has dicho qué competencias dominas, así que las tomo todas como brecha. ' + t
+    if (!carrera) t += '\nCuéntame qué estudias (por ejemplo «estudio contaduría») para evaluarte con el perfil de tu carrera.'
+    return { texto: t, datos: { ...r, acciones: [{ label: 'Evaluar en detalle', href: '#/brechas' + (carrera ? '?carrera=' + carrera.id : '') }] } }
   }],
   ['perfil', 'Analizador de perfil', 'Inteligencia artificial', '🧑‍💼', 'Lee tu experiencia en texto libre y extrae las competencias que ya tienes.', (ctx, msg) => {
     const t = norm(msg), enc = new Set(D.competencias_demandadas.map((c) => c.competencia).filter((c) => t.includes(norm(c))))
@@ -95,11 +78,11 @@ const AGENTES = [
     return { texto: l.length ? `Identifiqué estas competencias en tu perfil: ${l.join(', ')}. Puedes guardarlas en tu perfil.` : 'No identifiqué competencias aún. Cuéntame qué has estudiado, en qué has trabajado y qué herramientas usas.', datos: { competencias_detectadas: l } }
   }],
   ['tendencias', 'Radar de tendencias laborales', 'Analítica', '📈', 'Detecta las competencias que más crecen en demanda.', (ctx) => {
-    const top = [...demanda(ctx.territorio)].sort((a, b) => b.tendencia - a.tendencia).slice(0, 6)
+    const top = [...demandaLista(territoriosDe(ctx.datos))].sort((a, b) => b.tendencia - a.tendencia).slice(0, 6)
     return { texto: 'Competencias con mayor crecimiento:\n' + lista(top.map((f) => `${f.competencia} (${f.sector}): +${f.tendencia}%`)), datos: { tendencias: top } }
   }],
   ['rutas', 'Diseñador de rutas de aprendizaje', 'Inteligencia artificial', '🗺️', 'Convierte tus brechas en un plan de cursos ordenado (gratis primero).', (ctx) => {
-    const ruta = rutaPara(brechas(ctx.competencias, ctx.territorio).brechas), horas = ruta.reduce((s, r) => s + (r.cursos[0]?.horas || 0), 0)
+    const ruta = rutaPara(brechas({ competencias: ctx.competencias, carrera: carreraPorId(ctx.datos.carrera), territorios: territoriosDe(ctx.datos) }).brechas), horas = ruta.reduce((s, r) => s + (r.cursos[0]?.horas || 0), 0)
     return { texto: `Tu ruta de ${ruta.length} etapas (~${horas} horas; a 6 h/semana son unas ${Math.max(1, Math.floor(horas / 6))} semanas):\n` +
       ruta.map((r, i) => `Etapa ${i + 1}: ${r.competencia} → ` + (r.cursos[0] ? `${r.cursos[0].titulo} (${r.cursos[0].proveedor}, ${r.cursos[0].horas} h)` : 'buscando curso')).join('\n'), datos: { ruta, horas_totales: horas } }
   }],
@@ -115,8 +98,8 @@ const AGENTES = [
     return { texto: `Obtuviste ${puntaje}/100 en ${comp}: nivel ${nivel}.`, datos: { competencia: comp, puntaje, nivel } }
   }],
   ['vacantes', 'Emparejador de vacantes', 'Inteligencia artificial', '🤝', 'Calcula tu afinidad con cada vacante y te dice qué te falta para aplicar.', (ctx) => {
-    const v = emparejar(ctx.competencias, ctx.territorio)
-    return { texto: 'Vacantes con mayor afinidad:\n' + lista(v.slice(0, 5).map((x) => `${x.titulo} – ${x.empresa} (${x.territorio}): afinidad ${x.afinidad}%` + (x.faltan.length ? `, te falta: ${x.faltan.join(', ')}` : ' ✅'))) + AVISO, datos: { vacantes: v } }
+    const v = emparejar(ctx.competencias, territoriosDe({ ...ctx.datos, territorio: ctx.territorio }))
+    return { texto: 'Vacantes con mayor afinidad:\n' + lista(v.slice(0, 5).map((x) => `${x.titulo} – ${x.empresa} (${x.territorio}): afinidad ${x.afinidad}%` + (x.faltan.length ? `, te falta: ${x.faltan.join(', ')}` : ' ✅'))) + ' (Vacantes de EJEMPLO.)', datos: { vacantes: v } }
   }],
   ['entrevistas', 'Coach de entrevistas', 'Inteligencia artificial', '🎤', 'Simula entrevistas y te da retroalimentación con el método STAR.', () => {
     const p = ['Háblame de ti en 1 minuto.', 'Cuéntame de un problema que resolviste.', '¿Por qué quieres este cargo?', '¿Cuál es un aspecto que estás mejorando?', '¿Dónde te ves en 2 años?']
@@ -124,11 +107,17 @@ const AGENTES = [
   }],
   ['hoja_vida', 'Generador de hoja de vida', 'Inteligencia artificial', '📄', 'Arma tu hoja de vida con las palabras clave que buscan las empresas.', (ctx) => ({
     texto: `PERFIL PROFESIONAL\nJoven de ${ctx.territorio} con formación en ${ctx.perfil.nivel_educativo || '[tu nivel educativo]'}, interesado en ${ctx.perfil.area_interes || '[tu área]'}. Competencias: ${ctx.competencias.join(', ') || '[agrega tus competencias]'}.\n\nEXPERIENCIA\n• [Cargo] – [Empresa] – [Fechas]: logro medible (ej.: reduje tiempos un 20%).\n\nFORMACIÓN\n• [Programa] – [Institución] – [Año]\n\nCERTIFICADOS EmpleoTech 360 IA\n• [se agregan al completar tu ruta]`, datos: {} })],
-  ['orientador', 'Orientador vocacional', 'Inteligencia artificial', '🧭', 'Relaciona tus gustos con los sectores que más contratan en tu región.', (ctx) => {
-    const g = {}
-    D.competencias_demandadas.filter((x) => [ctx.territorio, 'Huila', 'Nacional'].includes(x.territorio)).forEach((x) => (g[x.sector] ||= []).push(x.demanda))
-    const s = Object.entries(g).map(([sector, v]) => ({ sector, demanda: Math.round(v.reduce((a, b) => a + b) / v.length) })).sort((a, b) => b.demanda - a.demanda)
-    return { texto: 'Sectores con más demanda en tu zona:\n' + lista(s.map((x) => `${x.sector}: índice ${x.demanda}`)) + '\n\nCuéntame: ¿te gusta más trabajar con personas, con datos, con máquinas o creando cosas?', datos: { sectores: s } }
+  ['orientador', 'Orientador vocacional', 'Inteligencia artificial', '🧭', 'Relaciona tus gustos con carreras y sectores que contratan.', (ctx, msg) => {
+    const t = norm(msg)
+    const GUSTOS = [[/persona|ayudar|gente|social|ensen/, ['Salud', 'Educación', 'Sector público', 'Turismo']], [/dato|numero|matemat|analiz/, ['Tecnología', 'Administración', 'Servicios financieros']],
+      [/maquina|tecnolog|computador|program|robot|electr/, ['Tecnología', 'Industria 4.0', 'Energía']], [/crear|dibuj|diseñ|disen|arte|music|moda/, ['Industrias creativas', 'Comercio', 'Construcción']],
+      [/campo|animal|agro|cafe|naturaleza|ambiente/, ['Agro', 'Medio ambiente']], [/vender|negocio|emprend|comerci/, ['Comercio', 'Administración', 'Turismo']]]
+    const g = GUSTOS.find(([re]) => re.test(t))
+    if (!g) return { texto: 'Te ayudo a elegir 🧭. Cuéntame: ¿te gusta más trabajar con personas, con datos y números, con máquinas y tecnología, creando cosas, con el campo y la naturaleza, o vendiendo y emprendiendo?',
+      datos: { sugerencias: ['Me gusta la tecnología', 'Me gusta ayudar a las personas', 'Me gustan los números', 'Me gusta el campo'] } }
+    const opciones = CARRERAS.filter((c) => g[1].includes(c.sector)).slice(0, 8)
+    return { texto: 'Según lo que te gusta, estas carreras pueden ser para ti:\n' + lista(opciones.map((c) => `${c.nombre} (${c.nivel}): ${c.perfil}`)) + '\nDime cuál te llama la atención y te muestro qué pide el mercado.',
+      datos: { sugerencias: opciones.slice(0, 3).map((c) => 'Quiero estudiar ' + c.nombre.toLowerCase()) } }
   }],
   ['blandas', 'Mentor de habilidades blandas', 'Inteligencia artificial', '💬', 'Entrena comunicación, trabajo en equipo, liderazgo y manejo del estrés.', () => ({
     texto: 'Reto de la semana 💬:\n• Lunes: escucha activa — repite con tus palabras lo que te dijeron.\n• Miércoles: presenta una idea en 60 segundos.\n• Viernes: pide retroalimentación a alguien.\nPractícalo también en el escenario de realidad virtual «Entrevista de trabajo».', datos: {} })],
@@ -145,14 +134,15 @@ const AGENTES = [
 
 const RUTAS_NOVA = [
   [/brecha|me falta|qu[eé] necesito|competencias? (pide|piden|demanda)/i, 'brechas'], [/dane|desempleo|ocupaci[oó]n|informalidad|ninis?|estad[ií]stica/i, 'dane'],
+  [/vocaci|qu[eé] estudiar|no s[eé] qu[eé]|me gusta/i, 'orientador'],
   [/vacante|empleo|trabajo|oferta|contrat/i, 'vacantes'], [/ruta|aprender|estudiar|curso|capacitar/i, 'rutas'], [/entrevista/i, 'entrevistas'],
-  [/hoja de vida|cv|curr[ií]cul/i, 'hoja_vida'], [/evaluar|examen|test|prueba/i, 'evaluador'], [/vocaci|qu[eé] estudiar|no s[eé] qu[eé]/i, 'orientador'],
+  [/hoja de vida|cv|curr[ií]cul/i, 'hoja_vida'], [/evaluar|examen|test|prueba/i, 'evaluador'],
   [/tendencia|futuro|crece/i, 'tendencias'], [/realidad virtual|vr|simulaci/i, 'vr'], [/iot|sensor|dispositivo|kiosco/i, 'iot'],
   [/segur|hack|estafa|phishing|contrase/i, 'ori'], [/blandas|comunicaci|liderazgo|equipo/i, 'blandas'], [/explica|qu[eé] es|c[oó]mo funciona|ens[eé][nñ]ame/i, 'tutor'], [/emprend|negocio propio/i, 'orientador'],
 ]
 function ejecutar(id, ctx, msg) {
   let a = AGENTES.find((x) => x.id === id) || err(404, `No existe el agente '${id}'.`), derivado
-  if (id === 'nova') { const d = RUTAS_NOVA.find(([re]) => re.test(msg)); if (d) { a = AGENTES.find((x) => x.id === d[1]); derivado = 'nova' } }
+  if (id === 'nova' && !conversarNova(msg, ctx.datos)) { const d = RUTAS_NOVA.find(([re]) => re.test(msg)); if (d) { a = AGENTES.find((x) => x.id === d[1]); derivado = 'nova' } }
   const r = a.fn(ctx, msg)
   return { agente: a.id, nombre: a.nombre, texto: r.texto, datos: r.datos, ia_generativa: false, derivado_por: derivado }
 }
@@ -191,10 +181,15 @@ export async function demoApi(ruta, method, body = {}) {
     const competencias = (body.datos?.competencias?.length ? body.datos.competencias : perfil.competencias) || []
     return ejecutar(m[1], { territorio: body.territorio || 'Neiva', datos: body.datos || {}, perfil, competencias }, msg)
   }
-  if (path === '/dane/indicadores') return indicadores(terr)
-  if (path === '/mercado/demanda') return demanda(terr)
-  if (path === '/brechas') { const r = brechas(body.competencias, terr); r.ruta = rutaPara(r.brechas); return r }
-  if (path === '/vacantes/emparejar') return emparejar(body.competencias, terr)
+  if (path === '/dane/consulta') return consultaDane(q.get('departamento') || null, q.get('municipio') || null)
+  if (path === '/territorios') return DEPARTAMENTOS
+  if (path === '/carreras') return CARRERAS
+  if (path === '/mercado/demanda') return demandaLista(territoriosDe({ territorio: terr }))
+  if (path === '/brechas') {
+    const r = brechas({ competencias: body.competencias || [], carrera: carreraPorId(body.carrera_id), territorios: territoriosDe(body) })
+    r.ruta = rutaPara(r.brechas); return r
+  }
+  if (path === '/vacantes/emparejar') return emparejar(body.competencias || [], territoriosDe(body))
   if (path === '/cursos') return D.cursos
   if (path === '/iot/resumen') return iotResumen()
   if (path === '/iot/dispositivos') err(400, 'En la demostración los dispositivos son simulados.')

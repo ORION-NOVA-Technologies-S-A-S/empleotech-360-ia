@@ -1,6 +1,6 @@
 -- =====================================================================
 -- ORI SECURITY para Supabase: Row Level Security (RLS)
--- Ejecutar SOLO en Supabase, después de 01_schema.sql y 02_seed_ejemplo.sql.
+-- Ejecutar SOLO en Supabase, después de 01_schema.sql y 02_datos_iniciales.sql.
 --
 -- Modelo: el backend Python se conecta con la cadena del pooler de Supabase
 -- (usuario postgres), que no está sujeto a RLS. La API pública de Supabase

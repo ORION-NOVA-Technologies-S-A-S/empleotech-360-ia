@@ -94,26 +94,54 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .ori-mini { position: absolute; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; font-size: .8rem; color: var(--plata); }
 .pasos ol { padding-left: 1.2em; display: grid; gap: 10px; max-width: 780px; }
 
-/* Avatares animados */
-.avatar { overflow: visible; }
-.avatar .flotar { animation: flotar 3.2s ease-in-out infinite; transform-origin: center; }
-.avatar .flotar-lento { animation: flotar 4.5s ease-in-out infinite; }
-.avatar .ojos { animation: parpadeo 4.6s infinite; transform-box: fill-box; transform-origin: center; }
-.nova .antena { animation: brillo 1.6s ease-in-out infinite; }
-.nova .boca rect { transform-box: fill-box; transform-origin: center; }
-.nova.hablando .boca rect { animation: hablar .5s ease-in-out infinite alternate; }
-.nova.hablando .boca rect:nth-child(2) { animation-delay: .12s; }
-.nova.hablando .boca rect:nth-child(3) { animation-delay: .24s; }
-.nova.hablando .boca rect:nth-child(4) { animation-delay: .36s; }
-.ori .monoculo { animation: brillo 2.4s ease-in-out infinite; }
-.ori .pulgar { animation: pulgar 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: bottom left; }
-.ori.alerta .escudo { animation: alerta .8s ease-in-out infinite alternate; }
-@keyframes flotar { 50% { transform: translateY(-6px); } }
-@keyframes parpadeo { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+/* Personajes animados: NOVA y ORI (motor de ORION CORE) */
+.personaje { display: inline-block; background: none; border: 0; padding: 0; cursor: default; line-height: 0; --ox: 0; --oy: 0; }
+button.personaje { cursor: pointer; border-radius: 24px; }
+.personaje svg { overflow: visible; filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .5)); }
+.flotar { animation: flotar 3.2s ease-in-out infinite; }
+.flotar-lento { animation: flotar 4.5s ease-in-out infinite; }
+.ojos, .blink { transform-box: fill-box; transform-origin: center; animation: parpadeo 4.6s infinite; }
+.blink.late { animation-delay: 1.7s; }
+.ring-spin { transform-box: fill-box; transform-origin: center; animation: girar 9s linear infinite; }
+/* NOVA */
+.nova-host .antena { animation: brillo 1.6s ease-in-out infinite; }
+.nova-host .nova-pupila { transform: translate(calc(var(--ox) * 7px), calc(var(--oy) * 5px)); transition: transform .3s ease-out; }
+.nova-host .nova-cabeza { transform-box: view-box; transform-origin: 100px 132px; transition: transform .3s; }
+.nova-host:hover .nova-cabeza { transform: rotate(calc(var(--ox) * 6deg)); }
+.nova-host .boca rect { transform-box: fill-box; transform-origin: center; }
+.nova-host.nova-talking .boca rect { animation: hablar .5s ease-in-out infinite alternate; }
+.nova-host.nova-talking .boca rect:nth-child(2) { animation-delay: .12s; }
+.nova-host.nova-talking .boca rect:nth-child(3) { animation-delay: .24s; }
+.nova-host.nova-talking .boca rect:nth-child(4) { animation-delay: .36s; }
+.nova-host.nova-talking .antena { animation-duration: .4s; }
+.nova-host .nova-brazo { transform-box: view-box; transform-origin: 146px 146px; }
+.nova-host.nova-saluda .nova-brazo { animation: saludar .5s ease-in-out 4 alternate; }
+.nova-host.nova-asiente .nova-cabeza { animation: asentir .45s ease-in-out 2; }
+/* ORI (idéntico a ORION CORE) */
+.ori-head { transform-box: view-box; transform-origin: 130px 170px; animation: var(--tilt, none); }
+.ori-host.tilt { --tilt: tilt .8s ease-in-out; }
+.ori-pupil { transform: translate(calc(var(--ox) * 6px), calc(var(--oy) * 5px)); transition: transform .3s ease-out; }
+.ori-jaw { transform-box: fill-box; transform-origin: center top; animation: var(--jaw, none); }
+.ori-brow { transform: var(--brow, none); transition: transform .25s ease; }
+.ori-wing { transform-box: view-box; transform-origin: 62px 300px; animation: var(--flap, none); }
+.ori-tuft { transform-box: fill-box; transform-origin: center bottom; transform: var(--tuft, none); transition: transform .25s ease; }
+.ori-ring { animation-duration: var(--ring, 9s); }
+.ori-host.ori-talking { --jaw: jaw .17s ease-in-out infinite alternate; --brow: translateY(-5px); }
+.ori-host.ori-flap { --flap: flap .45s ease-in-out 3; }
+.ori-host.ori-scan { --ring: 1.2s; --brow: translateY(-3px); }
+.ori-host:hover, .ori-host.ori-alert { --tuft: rotate(-8deg) scaleY(1.12); }
+@keyframes flotar { 50% { transform: translateY(-7px); } }
+@keyframes parpadeo { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
 @keyframes brillo { 50% { opacity: .45; } }
+@keyframes girar { to { transform: rotate(360deg); } }
 @keyframes hablar { from { transform: scaleY(.4); } to { transform: scaleY(1.3); } }
-@keyframes pulgar { 50% { transform: rotate(-10deg); } }
-@keyframes alerta { to { fill: var(--rojo); } }
+@keyframes saludar { from { transform: rotate(0); } to { transform: rotate(-28deg); } }
+@keyframes asentir { 50% { transform: translateY(5px); } }
+@keyframes tilt { 30% { transform: rotate(-9deg); } 70% { transform: rotate(6deg); } }
+@keyframes jaw { from { transform: translateY(0) scaleY(.6); } to { transform: translateY(4px) scaleY(1.15); } }
+@keyframes flap { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-24deg); } }
+.burbuja-personaje { background: rgba(16, 27, 50, .95); border: 1px solid rgba(245, 181, 68, .5); border-radius: 14px; padding: 10px 13px; font-size: .88rem; line-height: 1.45; max-width: 260px; }
+.burbuja-personaje b { color: #f5b544; }
 
 /* Chat */
 .chat { display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--borde); border-radius: var(--radio); height: 560px; overflow: hidden; }
@@ -209,3 +237,27 @@ th { background: var(--fondo-2); color: var(--tenue); font-weight: 600; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
 .banda-demo { background: rgba(79, 125, 255, .14); border-bottom: 1px solid var(--borde); color: var(--plata); text-align: center; font-size: .85rem; padding: 8px 16px; }
+
+/* Héroe con NOVA y ORI interactivos */
+.heroe-personajes { display: flex; align-items: flex-end; justify-content: center; gap: 10px; }
+.heroe-personajes::before { left: 50%; top: 50%; transform: translate(-60%, -50%); }
+.personaje-con-burbuja { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 1; }
+.personaje-con-burbuja .burbuja-personaje { min-height: 4.4em; }
+.nova-lado .burbuja-personaje { border-color: rgba(79, 125, 255, .6); }
+.ori-lado { margin-bottom: 6px; }
+.ori-lado .burbuja-personaje { max-width: 200px; font-size: .82rem; }
+
+/* Brechas por carrera */
+.filtros { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 14px; }
+.filtros .campo { max-width: none; }
+.carreras { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; max-height: 340px; overflow-y: auto; padding: 2px; }
+.carrera { text-align: left; background: var(--fondo-2); border: 1px solid var(--borde); color: var(--texto); border-radius: 12px; padding: 10px 12px; cursor: pointer; font: inherit; }
+.carrera b { display: block; font-size: .9rem; }
+.carrera small { color: var(--tenue); font-size: .78rem; }
+.carrera.activo { border-color: var(--azul); background: #18205a; }
+.perfil-carrera .pill { margin-right: 6px; }
+.btn-icono.escuchando { background: var(--rojo); animation: brillo 1s infinite; }
+@media (max-width: 860px) {
+  .heroe-personajes { flex-wrap: wrap; }
+  .ori-lado .burbuja-personaje { max-width: 160px; }
+}

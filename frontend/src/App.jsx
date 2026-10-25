@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { CONTACTO, MODO_DEMO, RECURSO, sesion } from './api.js'
 import Chat from './components/Chat.jsx'
-import { NovaAvatar } from './components/Avatares.jsx'
+import { NovaAvatar, SpritePersonajes } from './components/Avatares.jsx'
+import { iniciarVida } from './components/vida.js'
 import Inicio from './pages/Inicio.jsx'
 import Agentes from './pages/Agentes.jsx'
 import Brechas from './pages/Brechas.jsx'
@@ -25,6 +26,8 @@ export default function App() {
   const [usuario, setUsuario] = useState(sesion.usuario)
   const [novaAbierta, setNovaAbierta] = useState(false)
 
+  useEffect(() => { iniciarVida() }, [])
+
   useEffect(() => {
     const f = () => { setRuta(rutaActual()); window.scrollTo(0, 0) }
     window.addEventListener('hashchange', f)
@@ -34,6 +37,7 @@ export default function App() {
   const [, Pagina] = RUTAS[ruta] || RUTAS.inicio
   return (
     <>
+      <SpritePersonajes />
       <header className="cabecera">
         <a href="#/inicio" className="marca">
           <img src={RECURSO('logo.png')} alt="Orion Nova Technologies" />

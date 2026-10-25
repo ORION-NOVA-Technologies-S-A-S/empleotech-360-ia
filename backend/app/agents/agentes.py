@@ -3,7 +3,9 @@ import re
 
 from .. import db
 from ..security import analizar_mensaje
+from ..datos import carrera_por_id, carreras, detectar_territorio
 from ..services import mercado
+from ..services.conversacion import conversar_nova
 from ..utils import normalizar
 from .base import Agente, Contexto
 
@@ -12,19 +14,19 @@ from .base import Agente, Contexto
 class Nova(Agente):
     id, nombre, icono = "nova", "NOVA · Asistente humanoide", "🤖"
     area = "Inteligencia artificial"
-    descripcion = "Orquestadora: conversa con el joven y lo dirige al agente experto que necesita."
+    descripcion = "Conversa contigo, te recuerda y te lleva al agente experto que necesitas."
     sistema = ("Eres NOVA, la asistente humanoide de EmpleoTech 360 IA de Orion Nova Technologies. "
                "Eres cálida, motivadora y concreta. Ayudas a jóvenes colombianos a encontrar empleo.")
 
     RUTAS = [
         (r"brecha|me falta|qu[eé] necesito|competencias? (pide|piden|demanda)", "brechas"),
         (r"dane|desempleo|ocupaci[oó]n|informalidad|ninis?|estad[ií]stica", "dane"),
+        (r"vocaci|qu[eé] estudiar|no s[eé] qu[eé]|me gusta", "orientador"),
         (r"vacante|empleo|trabajo|oferta|contrat", "vacantes"),
         (r"ruta|aprender|estudiar|curso|capacitar", "rutas"),
         (r"entrevista", "entrevistas"),
         (r"hoja de vida|cv|curr[ií]cul", "hoja_vida"),
         (r"evaluar|examen|test|prueba", "evaluador"),
-        (r"vocaci|qu[eé] estudiar|no s[eé] qu[eé]", "orientador"),
         (r"tendencia|futuro|crece", "tendencias"),
         (r"realidad virtual|vr|simulaci", "vr"),
         (r"iot|sensor|dispositivo|kiosco", "iot"),
@@ -36,6 +38,9 @@ class Nova(Agente):
 
     async def ejecutar(self, ctx: Contexto, mensaje: str) -> dict:
         from .registro import obtener_agente
+        social = await conversar_nova(mensaje, ctx.datos)
+        if social:
+            return {"agente": self.id, "nombre": self.nombre, "texto": social["texto"], "datos": social["datos"], "ia_generativa": False}
         destino = next((a for p, a in self.RUTAS if re.search(p, mensaje, re.I)), None)
         if destino:
             r = await obtener_agente(destino).ejecutar(ctx, mensaje)
@@ -44,11 +49,10 @@ class Nova(Agente):
         return await super().ejecutar(ctx, mensaje)
 
     async def preparar(self, ctx, mensaje):
-        return ("¡Hola! Soy NOVA 🤖, tu asistente de EmpleoTech 360 IA. Puedo mostrarte las brechas "
-                "laborales de tu región con datos del DANE, armarte una ruta de aprendizaje, buscarte "
-                "vacantes, prepararte para entrevistas y practicar en realidad virtual. ¿Por dónde empezamos?",
-                {"sugerencias": ["¿Qué competencias me faltan?", "Muéstrame el desempleo juvenil",
-                                 "Búscame vacantes", "Prepárame para una entrevista"]}, "")
+        nombre = ctx.datos.get("nombre")
+        return (f"Mmm, no estoy segura de haberte entendido{', ' + nombre if nombre else ''}. 🤔 Puedes contarme qué estudias, "
+                "preguntarme por el desempleo de tu departamento, pedirme vacantes o una ruta de cursos.",
+                {"sugerencias": ["¿Qué puedes hacer?", "Estudio ingeniería de sistemas", "Desempleo en el Huila", "Búscame vacantes"]}, "")
 
 
 # 2 ───────────────────────────────────────────────────────── ORI SECURITY
@@ -83,38 +87,46 @@ class OriSecurity(Agente):
 class AnalistaDane(Agente):
     id, nombre, icono = "dane", "Analista DANE del mercado laboral", "📊"
     area = "Analítica"
-    descripcion = "Lee los indicadores de la GEIH del DANE (desempleo, informalidad, ninis) por territorio."
+    descripcion = "Explica los indicadores oficiales de la GEIH del DANE: nacional, departamentos y ciudades."
     sistema = "Eres un economista laboral que explica indicadores del DANE (GEIH) a jóvenes, sin tecnicismos."
 
     async def preparar(self, ctx, mensaje):
-        ind = await mercado.indicadores(ctx.territorio)
-        if not ind:
-            return "Aún no hay indicadores del DANE cargados.", {"indicadores": []}, ""
-        ultimo = max(i["periodo"] for i in ind)
-        recientes = [i for i in ind if i["periodo"] == ultimo]
-        lineas = [f"• {i['indicador']} {i['grupo']} ({i['territorio']}): {i['valor']}{i['unidad']}" for i in recientes]
-        ejemplo = any(i["es_ejemplo"] for i in ind)
-        texto = (f"Indicadores del mercado laboral, periodo {ultimo}:\n" + "\n".join(lineas)
-                 + mercado.texto_aviso_ejemplo(ejemplo))
-        return texto, {"indicadores": ind, "es_ejemplo": ejemplo}, texto
+        dep, mun = detectar_territorio(mensaje, ctx.datos.get("departamento"), ctx.datos.get("municipio"))
+        c = await mercado.consulta_dane(dep, mun)
+        v, pct = mercado.valor, mercado.pct
+        lineas = [f"🇨🇴 Nacional: desempleo {pct(v(c['nacional'], 'TD'))} en 2025; jóvenes de 15 a 28 años "
+                  f"{pct(v(c['nacional'], 'TD', 'Jóvenes 15-28'))} (may–jul 2026); el {pct(v(c['nacional'], 'NiNi', 'Jóvenes 15-28'))} "
+                  "de los jóvenes ni estudia ni trabaja."]
+        if c["departamento"]:
+            d = c["departamento"]
+            lineas.append(f"📍 {dep}: desempleo {pct(v(d, 'TD'))}, ocupación {pct(v(d, 'TO'))} y participación {pct(v(d, 'TGP'))} (año 2025).")
+        if c["municipio"]:
+            m = c["municipio"][0]
+            lineas.append(f"🏙️ {mun}: desempleo {pct(v(c['municipio'], 'TD'))} ({m['periodo_nombre'].lower()}).{' ' + m['nota'] if m['nota'] else ''}")
+        if not dep:
+            lineas.append("Dime tu departamento o municipio y te muestro sus cifras. Ejemplo: «desempleo en el Huila».")
+        texto = "\n".join(lineas + c["avisos"]) + "\nFuente: DANE – GEIH."
+        return texto, {**c, "acciones": [{"label": "Ver gráficos DANE", "href": "#/dane"}]}, texto
 
 
 # 4 ─────────────────────────────────────────────────── Detector de brechas
 class DetectorBrechas(Agente):
     id, nombre, icono = "brechas", "Detector de brechas laborales", "🎯"
     area = "Analítica"
-    descripcion = "Compara tus competencias con las que pide el mercado de tu territorio."
+    descripcion = "Compara el perfil de tu carrera y tus competencias con lo que pide el mercado."
     sistema = "Eres un analista de talento que explica brechas de competencias y cómo cerrarlas."
 
     async def preparar(self, ctx, mensaje):
-        r = await mercado.calcular_brechas(ctx.competencias, ctx.territorio)
-        top = r["brechas"][:5]
-        texto = (f"Tu cobertura frente a la demanda de {ctx.territorio} es {r['cobertura']}%. "
-                 "Tus 5 brechas prioritarias:\n" +
-                 "\n".join(f"{n}. {b['competencia']} (demanda {b['demanda']:.0f}, crece {b['tendencia']:+.0f}%)"
-                           for n, b in enumerate(top, 1)) + mercado.texto_aviso_ejemplo(r["es_ejemplo"]))
+        carrera = carrera_por_id(ctx.datos.get("carrera"))
+        r = await mercado.calcular_brechas(ctx.competencias, ctx.territorios, carrera)
+        texto = ((f"Para {carrera['nombre']}, " if carrera else "Frente a la demanda general, ") + f"tu cobertura es {r['cobertura']}%. "
+                 "Tus 5 brechas prioritarias:\n" + "\n".join(f"{n}. {b['competencia']} ({b['tipo'].lower()})" for n, b in enumerate(r["brechas"][:5], 1))
+                 + mercado.AVISO_DEMANDA)
         if not ctx.competencias:
-            texto = "Aún no me has dicho tus competencias, así que tomo todas como brecha. " + texto
+            texto = "Aún no me has dicho qué competencias dominas, así que las tomo todas como brecha. " + texto
+        if not carrera:
+            texto += "\nCuéntame qué estudias (por ejemplo «estudio contaduría») para evaluarte con el perfil de tu carrera."
+        r["acciones"] = [{"label": "Evaluar en detalle", "href": "#/brechas" + (f"?carrera={carrera['id']}" if carrera else "")}]
         return texto, r, texto
 
 
@@ -150,7 +162,7 @@ class Tendencias(Agente):
     sistema = "Eres un analista de prospectiva laboral en Colombia."
 
     async def preparar(self, ctx, mensaje):
-        filas = await mercado.demanda_territorio(ctx.territorio)
+        filas = await mercado.demanda_lista(ctx.territorios)
         top = sorted(filas, key=lambda x: x["tendencia"], reverse=True)[:6]
         texto = "Competencias con mayor crecimiento:\n" + "\n".join(
             f"• {f['competencia']} ({f['sector']}): {f['tendencia']:+.0f}%" for f in top)
@@ -165,7 +177,7 @@ class RutasAprendizaje(Agente):
     sistema = "Eres un diseñador instruccional que arma planes de estudio realistas para jóvenes que trabajan o estudian."
 
     async def preparar(self, ctx, mensaje):
-        b = await mercado.calcular_brechas(ctx.competencias, ctx.territorio)
+        b = await mercado.calcular_brechas(ctx.competencias, ctx.territorios, carrera_por_id(ctx.datos.get("carrera")))
         ruta = await mercado.ruta_para(b["brechas"])
         horas = sum(r["cursos"][0]["horas"] for r in ruta if r["cursos"])
         lineas = [f"Etapa {n}: {r['competencia']} → " + (f"{r['cursos'][0]['titulo']} ({r['cursos'][0]['proveedor']}, {r['cursos'][0]['horas']} h)"
@@ -236,10 +248,10 @@ class Vacantes(Agente):
     sistema = "Eres un headhunter que recomienda vacantes y explica qué le falta al candidato."
 
     async def preparar(self, ctx, mensaje):
-        v = await mercado.emparejar_vacantes(ctx.competencias, ctx.territorio)
+        v = await mercado.emparejar_vacantes(ctx.competencias, ctx.territorios)
         lineas = [f"• {x['titulo']} – {x['empresa']} ({x['territorio']}): afinidad {x['afinidad']}%"
                   + (f", te falta: {', '.join(x['faltan'])}" if x["faltan"] else " ✅") for x in v[:5]]
-        texto = "Vacantes con mayor afinidad:\n" + "\n".join(lineas) + mercado.texto_aviso_ejemplo(any(x["es_ejemplo"] for x in v))
+        texto = "Vacantes con mayor afinidad:\n" + "\n".join(lineas) + (" (Vacantes de EJEMPLO.)" if any(x["es_ejemplo"] for x in v) else "")
         return texto, {"vacantes": v}, texto
 
 
@@ -281,17 +293,28 @@ class HojaVida(Agente):
 class Orientador(Agente):
     id, nombre, icono = "orientador", "Orientador vocacional", "🧭"
     area = "Inteligencia artificial"
-    descripcion = "Relaciona tus gustos con los sectores que más contratan en tu región."
-    sistema = "Eres orientador vocacional. Haz preguntas sobre gustos y conecta con sectores con demanda real."
+    descripcion = "Relaciona tus gustos con carreras y sectores que contratan."
+    sistema = "Eres orientador vocacional. Haz preguntas sobre gustos y conecta con carreras y sectores con demanda real."
+
+    GUSTOS = [(r"persona|ayudar|gente|social|ensen", ["Salud", "Educación", "Sector público", "Turismo"]),
+              (r"dato|numero|matemat|analiz", ["Tecnología", "Administración", "Servicios financieros"]),
+              (r"maquina|tecnolog|computador|program|robot|electr", ["Tecnología", "Industria 4.0", "Energía"]),
+              (r"crear|dibuj|disen|arte|music|moda", ["Industrias creativas", "Comercio", "Construcción"]),
+              (r"campo|animal|agro|cafe|naturaleza|ambiente", ["Agro", "Medio ambiente"]),
+              (r"vender|negocio|emprend|comerci", ["Comercio", "Administración", "Turismo"])]
 
     async def preparar(self, ctx, mensaje):
-        sectores = await db.fetch(
-            """select sector, round(avg(demanda))::int as demanda, count(*)::int as competencias
-               from competencias_demandadas where territorio in (%s,'Huila','Nacional')
-               group by sector order by avg(demanda) desc""", ctx.territorio)
-        texto = ("Sectores con más demanda en tu zona:\n" + "\n".join(f"• {s['sector']}: índice {s['demanda']}" for s in sectores)
-                 + "\n\nCuéntame: ¿te gusta más trabajar con personas, con datos, con máquinas o creando cosas?")
-        return texto, {"sectores": sectores}, texto
+        t = normalizar(mensaje)
+        g = next((sec for patron, sec in self.GUSTOS if re.search(patron, t)), None)
+        if not g:
+            texto = ("Te ayudo a elegir 🧭. Cuéntame: ¿te gusta más trabajar con personas, con datos y números, con máquinas "
+                     "y tecnología, creando cosas, con el campo y la naturaleza, o vendiendo y emprendiendo?")
+            return texto, {"sugerencias": ["Me gusta la tecnología", "Me gusta ayudar a las personas", "Me gustan los números", "Me gusta el campo"]}, texto
+        opciones = [c for c in carreras() if c["sector"] in g][:8]
+        texto = ("Según lo que te gusta, estas carreras pueden ser para ti:\n"
+                 + "\n".join(f"• {c['nombre']} ({c['nivel']}): {c['perfil']}" for c in opciones)
+                 + "\nDime cuál te llama la atención y te muestro qué pide el mercado.")
+        return texto, {"sugerencias": [f"Quiero estudiar {c['nombre'].lower()}" for c in opciones[:3]]}, texto
 
 
 # 14 ─────────────────────────────────────────── Mentor de habilidades blandas

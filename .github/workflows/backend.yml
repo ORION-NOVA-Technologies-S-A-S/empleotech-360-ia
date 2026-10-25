@@ -17,10 +17,11 @@ jobs:
         env: { PGPASSWORD: prueba }
         run: |
           psql -h localhost -U postgres -d empleotech -v ON_ERROR_STOP=1 -f database/01_schema.sql
-          psql -h localhost -U postgres -d empleotech -v ON_ERROR_STOP=1 -f database/02_seed_ejemplo.sql
+          psql -h localhost -U postgres -d empleotech -v ON_ERROR_STOP=1 -f database/02_datos_iniciales.sql
       - name: Instalar y arrancar la API
         working-directory: backend
         env:
+          DATOS_DIR: ${{ github.workspace }}/database/datos
           DATABASE_URL: postgresql://postgres:prueba@localhost:5432/empleotech
           JWT_SECRET: clave-de-prueba-solo-para-ci-0123456789
         run: |
@@ -29,4 +30,7 @@ jobs:
           sleep 6
           curl -fsS localhost:8000/api/salud
           curl -fsS localhost:8000/api/agentes | python -c "import json,sys; a=json.load(sys.stdin); assert len(a)==17, len(a); print('17 agentes OK')"
+          curl -fsS localhost:8000/api/carreras | python -c "import json,sys; c=json.load(sys.stdin); assert len(c)>=70; print(len(c),'carreras OK')"
+          curl -fsS "localhost:8000/api/dane/consulta?departamento=Huila&municipio=Neiva" | python -c "import json,sys; d=json.load(sys.stdin); assert d['departamento'] and d['municipio']; print('DANE OK')"
+          curl -fsS -X POST localhost:8000/api/brechas -H 'Content-Type: application/json' -d '{"carrera_id":"enfermeria","competencias":["Urgencias"],"departamento":"Huila"}' | python -c "import json,sys; d=json.load(sys.stdin); assert d['carrera']['id']=='enfermeria'; print('Brechas por carrera OK')"
           curl -fsS -X POST localhost:8000/api/agentes/nova -H 'Content-Type: application/json' -d '{"mensaje":"¿Qué competencias me faltan?","datos":{"competencias":["Programación Python"]}}'

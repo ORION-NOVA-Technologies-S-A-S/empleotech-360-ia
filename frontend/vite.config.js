@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    fs: { allow: ['..'] },  // permite leer database/datos/*.json
     proxy: { '/api': process.env.VITE_API_PROXY || 'http://localhost:8000' },
   },
 })

@@ -13,7 +13,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./database/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
-      - ./database/02_seed_ejemplo.sql:/docker-entrypoint-initdb.d/02_seed_ejemplo.sql:ro
+      - ./database/02_datos_iniciales.sql:/docker-entrypoint-initdb.d/02_datos_iniciales.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U empleotech -d empleotech"]
       interval: 5s
@@ -32,7 +32,7 @@ services:
     ports: ["3000:3000"]
 
   backend:
-    build: ./backend
+    build: { context: ., dockerfile: backend/Dockerfile }
     restart: unless-stopped
     env_file: .env
     depends_on:
@@ -40,7 +40,7 @@ services:
     ports: ["8000:8000"]
 
   frontend:
-    build: ./frontend
+    build: { context: ., dockerfile: frontend/Dockerfile }
     restart: unless-stopped
     depends_on: [backend]
     ports: ["8080:80"]

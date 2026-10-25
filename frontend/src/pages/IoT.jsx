@@ -54,16 +54,6 @@ export default function IoT({ usuario }) {
         </form>
       )}
 
-      <div className="panel">
-        <h2>¿Cómo envía datos un dispositivo?</h2>
-        <pre>{`# HTTP
-curl -X POST https://SU-DOMINIO/api/iot/lecturas/aula-neiva-01 \\
-  -H "X-Device-Key: iot_..." -H "Content-Type: application/json" \\
-  -d '[{"metrica":"temperatura","valor":24.5},{"metrica":"ocupacion","valor":18}]'
-
-# MQTT (tema empleotech/iot/aula-neiva-01)
-{"key":"iot_...","lecturas":[{"metrica":"co2","valor":640}]}`}</pre>
-      </div>
     </section>
   )
 }

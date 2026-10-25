@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { hablarConAgente } from '../api.js'
 import { NovaAvatar, OriAvatar } from './Avatares.jsx'
+import { callar, cambiarVoz, gesto, hablar, hayVoz, vozActiva } from './vida.js'
 
-function hablar(texto, activo) {
-  if (!activo || !('speechSynthesis' in window)) return
-  window.speechSynthesis.cancel()
-  const u = new SpeechSynthesisUtterance(texto.replace(/[•#*]/g, '').slice(0, 500))
-  u.lang = 'es-CO'
-  window.speechSynthesis.speak(u)
+const recordar = {
+  get(k) { try { return localStorage.getItem('empleotech.' + k) || '' } catch { return '' } },
+  set(k, v) { try { localStorage.setItem('empleotech.' + k, v) } catch {} },
 }
 
 function Quiz({ datos, onEnviar }) {
@@ -35,17 +33,25 @@ export default function Chat({ agente = 'nova', nombre = 'NOVA', competencias = 
   const [mensajes, setMensajes] = useState([])
   const [texto, setTexto] = useState('')
   const [cargando, setCargando] = useState(false)
-  const [voz, setVoz] = useState(false)
+  const [voz, setVoz] = useState(vozActiva())
+  const [escuchando, setEscuchando] = useState(false)
   const fin = useRef(null)
+  const esOri = agente === 'ori'
 
   const enviar = async (msg, extra = {}) => {
     if (!msg.trim() && !extra.respuestas && mensajes.length) return
     if (msg.trim()) setMensajes((m) => [...m, { de: 'yo', texto: msg }])
     setTexto(''); setCargando(true)
+    gesto(esOri ? 'ori' : 'nova', esOri ? 'scan' : 'asiente')
     try {
-      const r = await hablarConAgente(agente, msg, { territorio, datos: { competencias, ...extra } })
+      const datos = { competencias, nombre: recordar.get('nombre'), carrera: recordar.get('carrera'), ...extra }
+      const r = await hablarConAgente(agente, msg, { territorio, datos })
+      if (r.datos?.nombre_detectado) recordar.set('nombre', r.datos.nombre_detectado)
+      if (r.datos?.carrera_detectada) recordar.set('carrera', r.datos.carrera_detectada)
       setMensajes((m) => [...m, { de: r.agente, nombre: r.nombre, texto: r.texto, datos: r.datos, bloqueado: r.bloqueado }])
-      hablar(r.texto, voz)
+      const quien = r.agente === 'ori' || r.bloqueado ? 'ori' : 'nova'
+      gesto(quien, quien === 'ori' ? (r.bloqueado ? 'alert' : 'flap') : 'saluda')
+      hablar(r.texto, quien)
     } catch (e) {
       setMensajes((m) => [...m, { de: 'error', texto: e.message }])
     } finally { setCargando(false) }
@@ -54,27 +60,40 @@ export default function Chat({ agente = 'nova', nombre = 'NOVA', competencias = 
   // Saludo inicial del agente
   useEffect(() => { setMensajes([]); enviar('') }, [agente]) // eslint-disable-line
   useEffect(() => { fin.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }) }, [mensajes, cargando])
+  useEffect(() => () => callar(), [])
 
   const escuchar = () => {
     const R = window.SpeechRecognition || window.webkitSpeechRecognition
-    if (!R) return alert('Tu navegador no permite dictado por voz.')
-    const rec = new R(); rec.lang = 'es-CO'
+    if (!R) return alert('Tu navegador no permite dictado por voz. Prueba con Chrome.')
+    callar()
+    const rec = new R(); rec.lang = 'es-CO'; rec.interimResults = false
+    rec.onstart = () => setEscuchando(true)
+    rec.onend = () => setEscuchando(false)
     rec.onresult = (e) => enviar(e.results[0][0].transcript)
     rec.start()
   }
 
+  const alternarVoz = () => { const n = !voz; setVoz(n); cambiarVoz(n); if (n) hablar('Listo, vuelvo a hablar.', esOri ? 'ori' : 'nova') }
+
   return (
     <div className={`chat ${compacto ? 'compacto' : ''}`}>
       <div className="chat-cabecera">
-        {agente === 'ori' ? <OriAvatar size={56} /> : <NovaAvatar size={56} hablando={cargando} />}
-        <div><strong>{nombre}</strong><span className="tenue"> · protegido por ORI SECURITY</span></div>
-        <button className="btn-icono" title="Leer respuestas en voz alta" aria-pressed={voz} onClick={() => setVoz(!voz)}>{voz ? '🔊' : '🔈'}</button>
+        {esOri ? <OriAvatar size={46} /> : <NovaAvatar size={56} />}
+        <div><strong>{nombre}</strong><span className="tenue"> · {cargando ? 'pensando…' : 'en línea'} · protegido por ORI SECURITY</span></div>
+        {hayVoz() && (
+          <button className="btn-icono" title={voz ? 'Silenciar la voz' : 'Activar la voz'} aria-pressed={voz} onClick={alternarVoz}>{voz ? '🔊' : '🔇'}</button>
+        )}
       </div>
       <div className="chat-cuerpo">
         {mensajes.map((m, i) => (
           <div key={i} className={`msj ${m.de === 'yo' ? 'yo' : m.de === 'error' ? 'error' : m.bloqueado ? 'bloqueado' : 'bot'}`}>
             {m.nombre && m.de !== agente && <span className="msj-de">{m.nombre}</span>}
             <p>{m.texto}</p>
+            {m.datos?.acciones && (
+              <div className="chips">{m.datos.acciones.map((a) => (
+                <a key={a.label} className="chip on" href={a.href} target={/^https?:/.test(a.href) ? '_blank' : undefined} rel="noopener noreferrer">{a.label}</a>
+              ))}</div>
+            )}
             {m.datos?.sugerencias && (
               <div className="chips">{m.datos.sugerencias.map((s) => <button key={s} className="chip" onClick={() => enviar(s)}>{s}</button>)}</div>
             )}
@@ -87,10 +106,10 @@ export default function Chat({ agente = 'nova', nombre = 'NOVA', competencias = 
         <div ref={fin} />
       </div>
       <form className="chat-entrada" onSubmit={(e) => { e.preventDefault(); enviar(texto) }}>
-        <button type="button" className="btn-icono" title="Hablar" onClick={escuchar}>🎙️</button>
+        <button type="button" className={`btn-icono ${escuchando ? 'escuchando' : ''}`} title="Hablarle por voz" aria-label="Hablarle por voz" onClick={escuchar}>🎙️</button>
         <input value={texto} onChange={(e) => setTexto(e.target.value)} maxLength={4000}
-          placeholder={`Escríbele a ${nombre}…`} aria-label="Mensaje" />
-        <button className="btn" disabled={cargando || !texto.trim()}>Enviar</button>
+          placeholder={escuchando ? 'Te escucho…' : `Escríbele a ${nombre.split(' ·')[0]}…`} aria-label="Mensaje" />
+        <button className="btn" disabled={!texto.trim()}>Enviar</button>
       </form>
     </div>
   )

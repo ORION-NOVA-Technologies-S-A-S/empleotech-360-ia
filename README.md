@@ -16,14 +16,30 @@ EmpleoTech 360 IA identifica las **brechas laborales** de cada territorio con da
 
 ---
 
+## Demo en línea
+
+**https://empleotech.orionnovatechnologies.com** (GitHub Pages; se publica sola con cada cambio en `main`).
+La demo funciona en el navegador: NOVA conversa, recuerda tu nombre y tu carrera; ORI (el mismo de ORION CORE) da consejos y bloquea manipulaciones.
+
+## Carreras, territorios y datos del DANE
+
+- `database/datos/carreras.json`: **73 carreras y programas** (profesionales, tecnólogos y técnicos) con su perfil, las competencias de la carrera, lo que además pide el mercado y las transversales. Se pueden agregar más editando el archivo.
+- `database/datos/territorios.json`: **33 departamentos (incluido Bogotá D.C.) y 1.105 municipios** (lista base de [marcovega/colombia-json](https://github.com/marcovega/colombia-json), licencia MIT).
+- `database/datos/indicadores_dane.json`: **cifras oficiales de la GEIH** con su boletín de origen:
+  - Nacional 2025 (TD 8,9 %) y jóvenes 15-28 años may–jul 2026 (TD 14,1 %, ninis 20,6 %).
+  - 23 departamentos, año 2025 (boletín *Mercado laboral por departamentos*).
+  - 23 ciudades y áreas metropolitanas, oct–dic 2025. Las marcadas con nota se leyeron del gráfico del boletín: verifíquelas en el anexo oficial.
+- El DANE no publica la GEIH para todos los departamentos ni municipios; para esos la plataforma muestra la cifra más cercana y lo avisa.
+- El **índice de demanda por competencia, los cursos y las vacantes siguen siendo de ejemplo** hasta conectar fuentes reales (Servicio Público de Empleo, convenios con empresas).
+
 ## Los 17 agentes
 
 | # | Agente | Área | Qué hace |
 |---|---|---|---|
-| 1 | **NOVA** · asistente humanoide | IA | Conversa y enruta al agente experto |
+| 1 | **NOVA** · asistente humanoide | IA | Conversa, recuerda tu nombre y carrera, y enruta al agente experto |
 | 2 | **ORI SECURITY** | Ciberseguridad | Detecta fraudes en ofertas, bloquea manipulación, auditoría |
-| 3 | Analista DANE | Analítica | Explica desempleo, informalidad y ninis por territorio |
-| 4 | Detector de brechas | Analítica | Compara competencias del joven vs. demanda del territorio |
+| 3 | Analista DANE | Analítica | Cifras oficiales: nacional, departamento y ciudad |
+| 4 | Detector de brechas | Analítica | Perfil de la carrera + lo que pide el mercado vs. lo que el joven domina |
 | 5 | Analizador de perfil | IA | Extrae competencias de un texto libre |
 | 6 | Radar de tendencias | Analítica | Competencias que más crecen |
 | 7 | Diseñador de rutas | IA | Brechas → plan de cursos (gratis primero) |
@@ -32,7 +48,7 @@ EmpleoTech 360 IA identifica las **brechas laborales** de cada territorio con da
 | 10 | Emparejador de vacantes | IA | % de afinidad y qué falta para cada vacante |
 | 11 | Coach de entrevistas | IA | Simulación con método STAR |
 | 12 | Generador de hoja de vida | IA | Borrador con palabras clave |
-| 13 | Orientador vocacional | IA | Gustos ↔ sectores con demanda |
+| 13 | Orientador vocacional | IA | Gustos ↔ carreras y sectores con demanda |
 | 14 | Mentor de habilidades blandas | IA | Retos de comunicación y trabajo en equipo |
 | 15 | Laboratorio VR | Realidad virtual | Escenarios inmersivos |
 | 16 | Monitor IoT | IoT | Estado de sensores y kioscos |
@@ -56,7 +72,7 @@ docker compose exec backend python -m scripts.crear_admin carlosdanielculmap@gma
 ## Opción B · Base de datos en Supabase (recomendado en producción)
 
 1. En Supabase cree un proyecto (o use el de NOVA) y abra **SQL Editor**.
-2. Ejecute en orden: `database/01_schema.sql`, `database/02_seed_ejemplo.sql` y **`database/03_supabase_seguridad.sql`** (activa RLS: la API pública solo lee cursos, vacantes e indicadores; los datos personales quedan cerrados).
+2. Ejecute en orden: `database/01_schema.sql`, `database/02_datos_iniciales.sql` y **`database/03_supabase_seguridad.sql`** (activa RLS: la API pública solo lee cursos, vacantes e indicadores; los datos personales quedan cerrados).
 3. Copie la cadena del **Transaction pooler** (Project Settings → Database) en `DATABASE_URL` del `.env` con `?sslmode=require`.
 4. `docker compose up -d --build` (sin el perfil `local`, no se crea Postgres local).
 
@@ -64,11 +80,11 @@ docker compose exec backend python -m scripts.crear_admin carlosdanielculmap@gma
 
 ## Datos oficiales del DANE
 
-Las cifras incluidas son **de ejemplo** (`es_ejemplo = true`) y la plataforma lo avisa en pantalla. Para cargar las oficiales:
+La base trae las cifras oficiales indicadas arriba. Para cargar boletines nuevos:
 
-1. Descargue los anexos de **Mercado laboral** y **Mercado laboral de la juventud** en dane.gov.co.
-2. Arme un CSV: `periodo,territorio,grupo,indicador,valor,unidad` (indicadores: `TD`, `TO`, `TGP`, `Informalidad`, `NiNi`).
-3. `docker compose exec backend python -m scripts.importar_dane /ruta/datos.csv --borrar-ejemplos`
+1. Descargue los boletines o anexos de **Mercado laboral** en dane.gov.co.
+2. Arme un CSV: `periodo,periodo_nombre,nivel,territorio,departamento,grupo,indicador,valor,url` (nivel: `Nacional`, `Departamento` o `Municipio`; indicadores: `TD`, `TO`, `TGP`, `Informalidad`, `NiNi`).
+3. `docker compose exec backend python -m scripts.importar_dane /ruta/datos.csv`
 
 La demanda de competencias (`competencias_demandadas`) y las vacantes también vienen de ejemplo: conéctelas con fuentes como el Servicio Público de Empleo o convenios con empresas.
 

@@ -1,0 +1,1592 @@
+[
+ {
+  "id": "ingenieria-de-sistemas",
+  "nombre": "Ingeniería de sistemas",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Tecnología",
+  "perfil": "Diseña, desarrolla y gestiona soluciones de software, redes e infraestructura tecnológica.",
+  "competencias": [
+   "Programación Python",
+   "JavaScript / React",
+   "Bases de datos SQL",
+   "Redes y telecomunicaciones",
+   "Ingeniería de software",
+   "Gestión de proyectos"
+  ],
+  "mercado": [
+   "Computación en la nube",
+   "Ciberseguridad",
+   "Inteligencia artificial",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-de-software",
+  "nombre": "Ingeniería de software",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Tecnología",
+  "perfil": "Construye aplicaciones web y móviles de calidad con metodologías ágiles.",
+  "competencias": [
+   "Programación Python",
+   "JavaScript / React",
+   "Ingeniería de software",
+   "Bases de datos SQL",
+   "Metodologías ágiles"
+  ],
+  "mercado": [
+   "Computación en la nube",
+   "DevOps",
+   "Inteligencia artificial",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-electronica",
+  "nombre": "Ingeniería electrónica",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Industria 4.0",
+  "perfil": "Diseña circuitos, sistemas embebidos y de control.",
+  "competencias": [
+   "Electrónica y circuitos",
+   "IoT y electrónica",
+   "Sistemas de control",
+   "Programación de microcontroladores",
+   "Matemáticas aplicadas"
+  ],
+  "mercado": [
+   "Automatización industrial",
+   "Programación Python",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-mecatronica",
+  "nombre": "Ingeniería mecatrónica",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Industria 4.0",
+  "perfil": "Integra mecánica, electrónica y control para crear sistemas automatizados y robots.",
+  "competencias": [
+   "Automatización industrial",
+   "Robótica",
+   "Sistemas de control",
+   "Diseño CAD",
+   "IoT y electrónica"
+  ],
+  "mercado": [
+   "Programación Python",
+   "Mantenimiento industrial",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-industrial",
+  "nombre": "Ingeniería industrial",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Industria y logística",
+  "perfil": "Optimiza procesos productivos, logística y calidad.",
+  "competencias": [
+   "Gestión de procesos",
+   "Logística y cadena de suministro",
+   "Gestión de calidad",
+   "Excel avanzado",
+   "Gestión de proyectos"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Power BI",
+   "Lean manufacturing"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-civil",
+  "nombre": "Ingeniería civil",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Construcción",
+  "perfil": "Diseña y construye obras de infraestructura vial, hidráulica y edificaciones.",
+  "competencias": [
+   "Diseño estructural",
+   "Diseño CAD",
+   "Gestión de obras",
+   "Topografía",
+   "Presupuestos de obra"
+  ],
+  "mercado": [
+   "BIM",
+   "Seguridad industrial (HSE)",
+   "Gestión de proyectos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-ambiental",
+  "nombre": "Ingeniería ambiental",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Medio ambiente",
+  "perfil": "Previene y gestiona impactos ambientales y el uso sostenible de los recursos.",
+  "competencias": [
+   "Gestión ambiental",
+   "Tratamiento de aguas",
+   "Normativa ambiental",
+   "Sistemas de información geográfica"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Gestión de proyectos",
+   "Economía circular"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-de-petroleos",
+  "nombre": "Ingeniería de petróleos",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Hidrocarburos",
+  "perfil": "Planea la exploración, perforación y producción de hidrocarburos.",
+  "competencias": [
+   "Ingeniería de yacimientos",
+   "Perforación",
+   "Producción de hidrocarburos",
+   "Seguridad industrial (HSE)"
+  ],
+  "mercado": [
+   "Transición energética",
+   "Análisis de datos",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-agricola",
+  "nombre": "Ingeniería agrícola",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Agro",
+  "perfil": "Diseña sistemas de riego, maquinaria y poscosecha para el campo.",
+  "competencias": [
+   "Riego y drenaje",
+   "Maquinaria agrícola",
+   "Poscosecha",
+   "Topografía"
+  ],
+  "mercado": [
+   "Agricultura de precisión",
+   "IoT y electrónica",
+   "Gestión de proyectos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-electrica",
+  "nombre": "Ingeniería eléctrica",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Energía",
+  "perfil": "Diseña y opera sistemas de generación, transmisión y distribución eléctrica.",
+  "competencias": [
+   "Sistemas eléctricos de potencia",
+   "Instalaciones eléctricas (RETIE)",
+   "Sistemas de control",
+   "Diseño CAD"
+  ],
+  "mercado": [
+   "Energías renovables",
+   "Automatización industrial"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-mecanica",
+  "nombre": "Ingeniería mecánica",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Industria 4.0",
+  "perfil": "Diseña máquinas, sistemas térmicos y procesos de manufactura.",
+  "competencias": [
+   "Diseño CAD",
+   "Mantenimiento industrial",
+   "Termodinámica",
+   "Manufactura"
+  ],
+  "mercado": [
+   "Automatización industrial",
+   "Seguridad industrial (HSE)"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-quimica",
+  "nombre": "Ingeniería química",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Industria y logística",
+  "perfil": "Diseña y controla procesos de transformación química.",
+  "competencias": [
+   "Procesos químicos",
+   "Control de calidad",
+   "Seguridad industrial (HSE)",
+   "Gestión de procesos"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Normativa ambiental"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "arquitectura",
+  "nombre": "Arquitectura",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Construcción",
+  "perfil": "Diseña espacios y edificaciones funcionales y sostenibles.",
+  "competencias": [
+   "Diseño arquitectónico",
+   "Diseño CAD",
+   "Modelado 3D",
+   "Urbanismo"
+  ],
+  "mercado": [
+   "BIM",
+   "Presupuestos de obra",
+   "Realidad virtual"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "administracion-de-empresas",
+  "nombre": "Administración de empresas",
+  "nivel": "Profesional",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Administración",
+  "perfil": "Dirige organizaciones, planea estrategias y gestiona recursos.",
+  "competencias": [
+   "Gestión administrativa",
+   "Planeación estratégica",
+   "Finanzas",
+   "Talento humano",
+   "Excel avanzado"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Marketing digital",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "contaduria-publica",
+  "nombre": "Contaduría pública",
+  "nivel": "Profesional",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Administración",
+  "perfil": "Registra, analiza y certifica la información financiera y tributaria.",
+  "competencias": [
+   "Contabilidad básica",
+   "NIIF",
+   "Tributaria",
+   "Auditoría",
+   "Excel avanzado"
+  ],
+  "mercado": [
+   "Software contable",
+   "Análisis de datos",
+   "Facturación electrónica"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "economia",
+  "nombre": "Economía",
+  "nivel": "Profesional",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Administración",
+  "perfil": "Analiza mercados, políticas públicas y comportamiento económico.",
+  "competencias": [
+   "Análisis económico",
+   "Estadística",
+   "Econometría",
+   "Análisis de datos"
+  ],
+  "mercado": [
+   "Programación Python",
+   "Power BI",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "negocios-internacionales",
+  "nombre": "Negocios internacionales",
+  "nivel": "Profesional",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Comercio",
+  "perfil": "Gestiona comercio exterior, aduanas y mercados internacionales.",
+  "competencias": [
+   "Comercio exterior",
+   "Logística y cadena de suministro",
+   "Negociación",
+   "Inglés B1+"
+  ],
+  "mercado": [
+   "Marketing digital",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "mercadeo-y-publicidad",
+  "nombre": "Mercadeo y publicidad",
+  "nivel": "Profesional",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Comercio",
+  "perfil": "Diseña estrategias de marca, publicidad y ventas.",
+  "competencias": [
+   "Marketing digital",
+   "Investigación de mercados",
+   "Creación de contenido",
+   "Ventas"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Inteligencia artificial"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "finanzas",
+  "nombre": "Finanzas",
+  "nivel": "Profesional",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Servicios financieros",
+  "perfil": "Gestiona inversiones, riesgos y planeación financiera.",
+  "competencias": [
+   "Finanzas",
+   "Gestión de riesgos",
+   "Excel avanzado",
+   "Análisis de datos"
+  ],
+  "mercado": [
+   "Programación Python",
+   "Power BI",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "administracion-publica",
+  "nombre": "Administración pública",
+  "nivel": "Profesional",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Sector público",
+  "perfil": "Gestiona entidades y políticas públicas.",
+  "competencias": [
+   "Gestión pública",
+   "Contratación estatal",
+   "Formulación de proyectos",
+   "Normativa pública"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Gestión de proyectos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "administracion-turistica-y-hotelera",
+  "nombre": "Administración turística y hotelera",
+  "nivel": "Profesional",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Turismo",
+  "perfil": "Gestiona hoteles, agencias y destinos turísticos.",
+  "competencias": [
+   "Turismo y hotelería",
+   "Servicio al cliente",
+   "Gestión administrativa",
+   "Inglés B1+"
+  ],
+  "mercado": [
+   "Marketing digital",
+   "Revenue management"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "medicina",
+  "nombre": "Medicina",
+  "nivel": "Profesional",
+  "area": "Ciencias de la salud",
+  "sector": "Salud",
+  "perfil": "Previene, diagnostica y trata enfermedades.",
+  "competencias": [
+   "Atención clínica",
+   "Diagnóstico médico",
+   "Urgencias",
+   "Salud pública"
+  ],
+  "mercado": [
+   "Telemedicina",
+   "Inglés B1+",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "enfermeria",
+  "nombre": "Enfermería",
+  "nivel": "Profesional",
+  "area": "Ciencias de la salud",
+  "sector": "Salud",
+  "perfil": "Cuida a las personas y gestiona servicios de enfermería.",
+  "competencias": [
+   "Cuidado del paciente",
+   "Administración de medicamentos",
+   "Urgencias",
+   "Salud pública"
+  ],
+  "mercado": [
+   "Telemedicina",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "odontologia",
+  "nombre": "Odontología",
+  "nivel": "Profesional",
+  "area": "Ciencias de la salud",
+  "sector": "Salud",
+  "perfil": "Previene y trata enfermedades de la boca.",
+  "competencias": [
+   "Atención clínica",
+   "Odontología restauradora",
+   "Bioseguridad"
+  ],
+  "mercado": [
+   "Gestión de consultorio",
+   "Marketing digital"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "psicologia",
+  "nombre": "Psicología",
+  "nivel": "Profesional",
+  "area": "Ciencias sociales y humanas",
+  "sector": "Salud",
+  "perfil": "Evalúa e interviene la conducta y la salud mental.",
+  "competencias": [
+   "Evaluación psicológica",
+   "Intervención clínica",
+   "Psicología organizacional",
+   "Investigación social"
+  ],
+  "mercado": [
+   "Talento humano",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "fisioterapia",
+  "nombre": "Fisioterapia",
+  "nivel": "Profesional",
+  "area": "Ciencias de la salud",
+  "sector": "Salud",
+  "perfil": "Rehabilita y previene alteraciones del movimiento.",
+  "competencias": [
+   "Rehabilitación física",
+   "Evaluación funcional",
+   "Actividad física"
+  ],
+  "mercado": [
+   "Telemedicina",
+   "Seguridad y salud en el trabajo"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "nutricion-y-dietetica",
+  "nombre": "Nutrición y dietética",
+  "nivel": "Profesional",
+  "area": "Ciencias de la salud",
+  "sector": "Salud",
+  "perfil": "Orienta la alimentación saludable y la nutrición clínica.",
+  "competencias": [
+   "Nutrición clínica",
+   "Seguridad alimentaria",
+   "Salud pública"
+  ],
+  "mercado": [
+   "Marketing digital",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "bacteriologia",
+  "nombre": "Bacteriología",
+  "nivel": "Profesional",
+  "area": "Ciencias de la salud",
+  "sector": "Salud",
+  "perfil": "Realiza análisis de laboratorio clínico.",
+  "competencias": [
+   "Laboratorio clínico",
+   "Bioseguridad",
+   "Control de calidad"
+  ],
+  "mercado": [
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "regencia-de-farmacia",
+  "nombre": "Regencia de farmacia",
+  "nivel": "Tecnólogo",
+  "area": "Ciencias de la salud",
+  "sector": "Salud",
+  "perfil": "Gestiona servicios farmacéuticos y dispensación de medicamentos.",
+  "competencias": [
+   "Servicio farmacéutico",
+   "Administración de medicamentos",
+   "Inventarios"
+  ],
+  "mercado": [
+   "Servicio al cliente",
+   "Software contable"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "seguridad-y-salud-en-el-trabajo",
+  "nombre": "Seguridad y salud en el trabajo",
+  "nivel": "Profesional",
+  "area": "Ciencias de la salud",
+  "sector": "Hidrocarburos",
+  "perfil": "Previene accidentes y enfermedades laborales.",
+  "competencias": [
+   "Seguridad y salud en el trabajo",
+   "Seguridad industrial (HSE)",
+   "Gestión de riesgos",
+   "Normativa laboral"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Realidad virtual"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "derecho",
+  "nombre": "Derecho",
+  "nivel": "Profesional",
+  "area": "Ciencias sociales y humanas",
+  "sector": "Servicios legales",
+  "perfil": "Asesora, representa y resuelve conflictos jurídicos.",
+  "competencias": [
+   "Derecho civil",
+   "Derecho laboral",
+   "Litigio",
+   "Redacción jurídica"
+  ],
+  "mercado": [
+   "Contratación estatal",
+   "Derecho digital y protección de datos",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "trabajo-social",
+  "nombre": "Trabajo social",
+  "nivel": "Profesional",
+  "area": "Ciencias sociales y humanas",
+  "sector": "Sector público",
+  "perfil": "Interviene con comunidades y familias para el bienestar social.",
+  "competencias": [
+   "Intervención comunitaria",
+   "Formulación de proyectos",
+   "Investigación social"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Gestión pública"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "comunicacion-social-y-periodismo",
+  "nombre": "Comunicación social y periodismo",
+  "nivel": "Profesional",
+  "area": "Ciencias sociales y humanas",
+  "sector": "Comercio",
+  "perfil": "Produce información y estrategias de comunicación.",
+  "competencias": [
+   "Redacción",
+   "Creación de contenido",
+   "Producción audiovisual",
+   "Comunicación asertiva"
+  ],
+  "mercado": [
+   "Marketing digital",
+   "Inteligencia artificial",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "sociologia",
+  "nombre": "Sociología",
+  "nivel": "Profesional",
+  "area": "Ciencias sociales y humanas",
+  "sector": "Sector público",
+  "perfil": "Investiga fenómenos sociales.",
+  "competencias": [
+   "Investigación social",
+   "Estadística",
+   "Análisis cualitativo"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Formulación de proyectos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "diseno-grafico",
+  "nombre": "Diseño gráfico",
+  "nivel": "Profesional",
+  "area": "Bellas artes",
+  "sector": "Comercio",
+  "perfil": "Crea piezas visuales e identidad de marca.",
+  "competencias": [
+   "Diseño gráfico",
+   "Ilustración digital",
+   "Branding",
+   "Creación de contenido"
+  ],
+  "mercado": [
+   "Diseño UX/UI",
+   "Marketing digital",
+   "Inteligencia artificial"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "musica",
+  "nombre": "Música",
+  "nivel": "Profesional",
+  "area": "Bellas artes",
+  "sector": "Industrias creativas",
+  "perfil": "Interpreta, compone y produce música.",
+  "competencias": [
+   "Interpretación musical",
+   "Producción musical",
+   "Teoría musical"
+  ],
+  "mercado": [
+   "Marketing digital",
+   "Creación de contenido"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "diseno-de-modas",
+  "nombre": "Diseño de modas",
+  "nivel": "Profesional",
+  "area": "Bellas artes",
+  "sector": "Industrias creativas",
+  "perfil": "Diseña y produce colecciones de moda.",
+  "competencias": [
+   "Diseño de modas",
+   "Patronaje",
+   "Tendencias de moda"
+  ],
+  "mercado": [
+   "Marketing digital",
+   "Comercio electrónico"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "licenciatura-en-educacion-infantil",
+  "nombre": "Licenciatura en educación infantil",
+  "nivel": "Profesional",
+  "area": "Ciencias de la educación",
+  "sector": "Educación",
+  "perfil": "Educa a niños en primera infancia.",
+  "competencias": [
+   "Pedagogía",
+   "Didáctica",
+   "Desarrollo infantil",
+   "Planeación educativa"
+  ],
+  "mercado": [
+   "Tecnologías educativas",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "licenciatura-en-matematicas",
+  "nombre": "Licenciatura en matemáticas",
+  "nivel": "Profesional",
+  "area": "Ciencias de la educación",
+  "sector": "Educación",
+  "perfil": "Enseña matemáticas en educación básica y media.",
+  "competencias": [
+   "Pedagogía",
+   "Didáctica",
+   "Matemáticas aplicadas"
+  ],
+  "mercado": [
+   "Tecnologías educativas",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "licenciatura-en-lenguas-extranjeras-ingles",
+  "nombre": "Licenciatura en lenguas extranjeras (inglés)",
+  "nivel": "Profesional",
+  "area": "Ciencias de la educación",
+  "sector": "Educación",
+  "perfil": "Enseña lenguas extranjeras.",
+  "competencias": [
+   "Pedagogía",
+   "Inglés C1",
+   "Didáctica"
+  ],
+  "mercado": [
+   "Tecnologías educativas",
+   "Traducción"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "licenciatura-en-educacion-fisica",
+  "nombre": "Licenciatura en educación física",
+  "nivel": "Profesional",
+  "area": "Ciencias de la educación",
+  "sector": "Educación",
+  "perfil": "Forma en actividad física, deporte y recreación.",
+  "competencias": [
+   "Pedagogía",
+   "Actividad física",
+   "Entrenamiento deportivo"
+  ],
+  "mercado": [
+   "Salud pública",
+   "Tecnologías educativas"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "agronomia",
+  "nombre": "Agronomía",
+  "nivel": "Profesional",
+  "area": "Agronomía, veterinaria y afines",
+  "sector": "Agro",
+  "perfil": "Maneja cultivos y sistemas productivos agrícolas.",
+  "competencias": [
+   "Manejo de cultivos",
+   "Agroindustria del café",
+   "Suelos y fertilización",
+   "Sanidad vegetal"
+  ],
+  "mercado": [
+   "Agricultura de precisión",
+   "Análisis de datos",
+   "Gestión de proyectos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "medicina-veterinaria-y-zootecnia",
+  "nombre": "Medicina veterinaria y zootecnia",
+  "nivel": "Profesional",
+  "area": "Agronomía, veterinaria y afines",
+  "sector": "Agro",
+  "perfil": "Cuida la salud animal y la producción pecuaria.",
+  "competencias": [
+   "Clínica veterinaria",
+   "Producción animal",
+   "Sanidad animal",
+   "Bioseguridad"
+  ],
+  "mercado": [
+   "Gestión de proyectos",
+   "Bienestar animal"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "zootecnia",
+  "nombre": "Zootecnia",
+  "nivel": "Profesional",
+  "area": "Agronomía, veterinaria y afines",
+  "sector": "Agro",
+  "perfil": "Optimiza la producción animal sostenible.",
+  "competencias": [
+   "Producción animal",
+   "Nutrición animal",
+   "Gestión de fincas"
+  ],
+  "mercado": [
+   "Agricultura de precisión",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "ingenieria-agroindustrial",
+  "nombre": "Ingeniería agroindustrial",
+  "nivel": "Profesional",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Agro",
+  "perfil": "Transforma y agrega valor a productos del campo.",
+  "competencias": [
+   "Agroindustria del café",
+   "Poscosecha",
+   "Control de calidad",
+   "Gestión de procesos"
+  ],
+  "mercado": [
+   "Comercio exterior",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "biologia",
+  "nombre": "Biología",
+  "nivel": "Profesional",
+  "area": "Matemáticas y ciencias naturales",
+  "sector": "Medio ambiente",
+  "perfil": "Estudia los seres vivos y la biodiversidad.",
+  "competencias": [
+   "Investigación científica",
+   "Biodiversidad",
+   "Laboratorio"
+  ],
+  "mercado": [
+   "Sistemas de información geográfica",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "matematicas-aplicadas",
+  "nombre": "Matemáticas aplicadas",
+  "nivel": "Profesional",
+  "area": "Matemáticas y ciencias naturales",
+  "sector": "Tecnología",
+  "perfil": "Modela problemas reales con matemáticas y estadística.",
+  "competencias": [
+   "Matemáticas aplicadas",
+   "Estadística",
+   "Modelado matemático",
+   "Programación Python"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Inteligencia artificial"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "estadistica",
+  "nombre": "Estadística",
+  "nivel": "Profesional",
+  "area": "Matemáticas y ciencias naturales",
+  "sector": "Tecnología",
+  "perfil": "Recoge, analiza e interpreta datos.",
+  "competencias": [
+   "Estadística",
+   "Análisis de datos",
+   "Programación Python",
+   "Muestreo"
+  ],
+  "mercado": [
+   "Inteligencia artificial",
+   "Power BI"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "fisica",
+  "nombre": "Física",
+  "nivel": "Profesional",
+  "area": "Matemáticas y ciencias naturales",
+  "sector": "Tecnología",
+  "perfil": "Investiga y modela fenómenos físicos.",
+  "competencias": [
+   "Modelado matemático",
+   "Investigación científica",
+   "Programación Python"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Energías renovables"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "quimica",
+  "nombre": "Química",
+  "nivel": "Profesional",
+  "area": "Matemáticas y ciencias naturales",
+  "sector": "Industria y logística",
+  "perfil": "Analiza y sintetiza sustancias.",
+  "competencias": [
+   "Laboratorio",
+   "Control de calidad",
+   "Procesos químicos"
+  ],
+  "mercado": [
+   "Normativa ambiental",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-analisis-y-desarrollo-de-software",
+  "nombre": "Tecnología en análisis y desarrollo de software",
+  "nivel": "Tecnólogo",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Tecnología",
+  "perfil": "Desarrolla software web y móvil.",
+  "competencias": [
+   "Programación Python",
+   "JavaScript / React",
+   "Bases de datos SQL",
+   "Metodologías ágiles"
+  ],
+  "mercado": [
+   "Computación en la nube",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-gestion-de-redes-de-datos",
+  "nombre": "Tecnología en gestión de redes de datos",
+  "nivel": "Tecnólogo",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Tecnología",
+  "perfil": "Instala y administra redes y servidores.",
+  "competencias": [
+   "Redes y telecomunicaciones",
+   "Administración de servidores",
+   "Ciberseguridad"
+  ],
+  "mercado": [
+   "Computación en la nube",
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-ciberseguridad",
+  "nombre": "Tecnología en ciberseguridad",
+  "nivel": "Tecnólogo",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Tecnología",
+  "perfil": "Protege sistemas y responde a incidentes.",
+  "competencias": [
+   "Ciberseguridad",
+   "Redes y telecomunicaciones",
+   "Gestión de incidentes"
+  ],
+  "mercado": [
+   "Computación en la nube",
+   "Inglés B1+",
+   "Inteligencia artificial"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-gestion-empresarial",
+  "nombre": "Tecnología en gestión empresarial",
+  "nivel": "Tecnólogo",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Administración",
+  "perfil": "Apoya la gestión administrativa de empresas.",
+  "competencias": [
+   "Gestión administrativa",
+   "Excel avanzado",
+   "Talento humano"
+  ],
+  "mercado": [
+   "Marketing digital",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-contabilidad-y-finanzas",
+  "nombre": "Tecnología en contabilidad y finanzas",
+  "nivel": "Tecnólogo",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Administración",
+  "perfil": "Lleva contabilidad y apoya la gestión financiera.",
+  "competencias": [
+   "Contabilidad básica",
+   "Software contable",
+   "Tributaria",
+   "Excel avanzado"
+  ],
+  "mercado": [
+   "Facturación electrónica",
+   "Análisis de datos"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-gestion-logistica",
+  "nombre": "Tecnología en gestión logística",
+  "nivel": "Tecnólogo",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Industria y logística",
+  "perfil": "Coordina inventarios, almacenes y distribución.",
+  "competencias": [
+   "Logística y cadena de suministro",
+   "Inventarios",
+   "Excel avanzado"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Comercio exterior"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-gestion-del-talento-humano",
+  "nombre": "Tecnología en gestión del talento humano",
+  "nivel": "Tecnólogo",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Administración",
+  "perfil": "Apoya selección, nómina y bienestar laboral.",
+  "competencias": [
+   "Talento humano",
+   "Nómina",
+   "Normativa laboral"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Excel avanzado"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-marketing-digital",
+  "nombre": "Tecnología en marketing digital",
+  "nivel": "Tecnólogo",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Comercio",
+  "perfil": "Ejecuta campañas digitales y redes sociales.",
+  "competencias": [
+   "Marketing digital",
+   "Creación de contenido",
+   "Comercio electrónico"
+  ],
+  "mercado": [
+   "Análisis de datos",
+   "Inteligencia artificial"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-automatizacion-industrial",
+  "nombre": "Tecnología en automatización industrial",
+  "nivel": "Tecnólogo",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Industria 4.0",
+  "perfil": "Programa PLC y sistemas automatizados.",
+  "competencias": [
+   "Automatización industrial",
+   "Sistemas de control",
+   "Instalaciones eléctricas (RETIE)"
+  ],
+  "mercado": [
+   "IoT y electrónica",
+   "Mantenimiento industrial"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-mantenimiento-electromecanico",
+  "nombre": "Tecnología en mantenimiento electromecánico",
+  "nivel": "Tecnólogo",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Industria 4.0",
+  "perfil": "Mantiene equipos mecánicos y eléctricos.",
+  "competencias": [
+   "Mantenimiento industrial",
+   "Instalaciones eléctricas (RETIE)",
+   "Seguridad industrial (HSE)"
+  ],
+  "mercado": [
+   "Automatización industrial"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-produccion-agropecuaria-ecologica",
+  "nombre": "Tecnología en producción agropecuaria ecológica",
+  "nivel": "Tecnólogo",
+  "area": "Agronomía, veterinaria y afines",
+  "sector": "Agro",
+  "perfil": "Produce alimentos con prácticas sostenibles.",
+  "competencias": [
+   "Manejo de cultivos",
+   "Producción animal",
+   "Suelos y fertilización"
+  ],
+  "mercado": [
+   "Agricultura de precisión",
+   "Comercio electrónico"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-gestion-de-servicios-turisticos",
+  "nombre": "Tecnología en gestión de servicios turísticos",
+  "nivel": "Tecnólogo",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Turismo",
+  "perfil": "Diseña y opera servicios turísticos.",
+  "competencias": [
+   "Turismo y hotelería",
+   "Guianza turística",
+   "Servicio al cliente"
+  ],
+  "mercado": [
+   "Inglés B1+",
+   "Marketing digital"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-gastronomia",
+  "nombre": "Tecnología en gastronomía",
+  "nivel": "Tecnólogo",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Turismo",
+  "perfil": "Prepara y gestiona servicios de cocina.",
+  "competencias": [
+   "Cocina",
+   "Manipulación de alimentos",
+   "Costeo de recetas"
+  ],
+  "mercado": [
+   "Servicio al cliente",
+   "Marketing digital"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnologia-en-construccion",
+  "nombre": "Tecnología en construcción",
+  "nivel": "Tecnólogo",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Construcción",
+  "perfil": "Supervisa obras y procesos constructivos.",
+  "competencias": [
+   "Gestión de obras",
+   "Presupuestos de obra",
+   "Diseño CAD"
+  ],
+  "mercado": [
+   "BIM",
+   "Seguridad industrial (HSE)"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-sistemas",
+  "nombre": "Técnico en sistemas",
+  "nivel": "Técnico",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Tecnología",
+  "perfil": "Da soporte técnico a equipos y redes.",
+  "competencias": [
+   "Soporte técnico",
+   "Mantenimiento de computadores",
+   "Redes y telecomunicaciones"
+  ],
+  "mercado": [
+   "Ciberseguridad",
+   "Servicio al cliente"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-asistencia-administrativa",
+  "nombre": "Técnico en asistencia administrativa",
+  "nivel": "Técnico",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Administración",
+  "perfil": "Apoya tareas administrativas y de archivo.",
+  "competencias": [
+   "Gestión documental",
+   "Excel avanzado",
+   "Servicio al cliente"
+  ],
+  "mercado": [
+   "Facturación electrónica"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-contabilizacion-de-operaciones-comerciales",
+  "nombre": "Técnico en contabilización de operaciones comerciales",
+  "nivel": "Técnico",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Administración",
+  "perfil": "Registra operaciones contables.",
+  "competencias": [
+   "Contabilidad básica",
+   "Software contable",
+   "Facturación electrónica"
+  ],
+  "mercado": [
+   "Excel avanzado"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-enfermeria-auxiliar",
+  "nombre": "Técnico en enfermería (auxiliar)",
+  "nivel": "Técnico",
+  "area": "Ciencias de la salud",
+  "sector": "Salud",
+  "perfil": "Apoya el cuidado básico de pacientes.",
+  "competencias": [
+   "Cuidado del paciente",
+   "Bioseguridad",
+   "Administración de medicamentos"
+  ],
+  "mercado": [
+   "Servicio al cliente"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-ventas-de-productos-y-servicios",
+  "nombre": "Técnico en ventas de productos y servicios",
+  "nivel": "Técnico",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Comercio",
+  "perfil": "Vende y atiende clientes.",
+  "competencias": [
+   "Ventas",
+   "Servicio al cliente",
+   "Negociación"
+  ],
+  "mercado": [
+   "Marketing digital",
+   "Comercio electrónico"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-instalaciones-electricas-residenciales",
+  "nombre": "Técnico en instalaciones eléctricas residenciales",
+  "nivel": "Técnico",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Energía",
+  "perfil": "Instala redes eléctricas residenciales.",
+  "competencias": [
+   "Instalaciones eléctricas (RETIE)",
+   "Seguridad industrial (HSE)"
+  ],
+  "mercado": [
+   "Energías renovables"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-programacion-de-software",
+  "nombre": "Técnico en programación de software",
+  "nivel": "Técnico",
+  "area": "Ingeniería, arquitectura, urbanismo y afines",
+  "sector": "Tecnología",
+  "perfil": "Programa aplicaciones básicas.",
+  "competencias": [
+   "Programación Python",
+   "JavaScript / React",
+   "Bases de datos SQL"
+  ],
+  "mercado": [
+   "Inglés B1+"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-cocina",
+  "nombre": "Técnico en cocina",
+  "nivel": "Técnico",
+  "area": "Economía, administración, contaduría y afines",
+  "sector": "Turismo",
+  "perfil": "Prepara alimentos en restaurantes y hoteles.",
+  "competencias": [
+   "Cocina",
+   "Manipulación de alimentos"
+  ],
+  "mercado": [
+   "Servicio al cliente"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ },
+ {
+  "id": "tecnico-en-produccion-de-cafe",
+  "nombre": "Técnico en producción de café",
+  "nivel": "Técnico",
+  "area": "Agronomía, veterinaria y afines",
+  "sector": "Agro",
+  "perfil": "Maneja cultivo, beneficio y calidad del café.",
+  "competencias": [
+   "Agroindustria del café",
+   "Manejo de cultivos",
+   "Poscosecha"
+  ],
+  "mercado": [
+   "Catación de café",
+   "Comercio electrónico"
+  ],
+  "transversales": [
+   "Comunicación asertiva",
+   "Trabajo en equipo"
+  ]
+ }
+]
