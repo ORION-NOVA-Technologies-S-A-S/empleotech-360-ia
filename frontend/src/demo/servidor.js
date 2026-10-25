@@ -33,12 +33,12 @@ const pct = (f) => (f ? `${String(f.valor).replace('.', ',')}%` : '—')
 
 // ---------------- Los 17 agentes ----------------
 const BANCO = {
-  'Programación Python': [['¿Qué imprime print(2 ** 3)?', ['6', '8', '9'], 1], ['¿Qué estructura guarda pares clave-valor?', ['lista', 'tupla', 'diccionario'], 2], ['¿Con qué palabra se define una función?', ['func', 'def', 'function'], 1]],
+  'Lenguajes de programación': [['¿Qué imprime print(2 ** 3)?', ['6', '8', '9'], 1], ['¿Qué estructura guarda pares clave-valor?', ['lista', 'tupla', 'diccionario'], 2], ['¿Con qué palabra se define una función?', ['func', 'def', 'function'], 1]],
   Ciberseguridad: [['¿Qué es phishing?', ['Un antivirus', 'Engaño para robar datos', 'Un tipo de red'], 1], ['La contraseña más segura es…', ['123456', 'MiNombre2000', 'Frase-larga-con-símbolos-29'], 2], ['¿Qué agrega la verificación en dos pasos?', ['Una segunda prueba de identidad', 'Más velocidad', 'Nada'], 0]],
   'Análisis de datos': [['La mediana es…', ['el valor más repetido', 'el valor central', 'el promedio'], 1], ['¿Qué gráfico muestra la evolución en el tiempo?', ['torta', 'líneas', 'dispersión'], 1], ['Una tabla dinámica sirve para…', ['resumir datos', 'borrar datos', 'dibujar'], 0]],
 }
 const ESCENARIOS_VR = [['Entrevista de trabajo', 'Comunicación asertiva', 8], ['Atención al cliente', 'Servicio al cliente', 10], ['Centro de operaciones de ciberseguridad', 'Ciberseguridad', 12], ['Seguridad industrial en planta', 'Seguridad industrial (HSE)', 10], ['Montaje de sensores IoT', 'IoT y electrónica', 15]]
-const SINONIMOS = { python: 'Programación Python', react: 'JavaScript / React', javascript: 'JavaScript / React', datos: 'Análisis de datos', excel: 'Excel avanzado', ingles: 'Inglés B1+', 'seguridad informatica': 'Ciberseguridad', arduino: 'IoT y electrónica', ventas: 'Servicio al cliente', 'redes sociales': 'Marketing digital', 'inteligencia artificial': 'Inteligencia artificial', equipo: 'Trabajo en equipo' }
+const SINONIMOS = { python: 'Lenguajes de programación', programacion: 'Lenguajes de programación', react: 'Lenguajes de programación', javascript: 'Lenguajes de programación', datos: 'Análisis de datos', excel: 'Excel avanzado', ingles: 'Inglés B1+', 'seguridad informatica': 'Ciberseguridad', arduino: 'IoT y electrónica', ventas: 'Servicio al cliente', 'redes sociales': 'Marketing digital', 'inteligencia artificial': 'Inteligencia artificial', equipo: 'Trabajo en equipo' }
 const lista = (arr) => arr.map((x) => '• ' + x).join('\n')
 
 const AGENTES = [
@@ -89,8 +89,8 @@ const AGENTES = [
   ['tutor', 'Tutor IA personalizado', 'Inteligencia artificial', '🎓', 'Explica temas técnicos paso a paso, con ejemplos de la vida real.', () => ({
     texto: 'Con gusto te explico. En la versión con servidor, el Tutor redacta explicaciones con IA generativa. Mientras tanto, revisa los cursos recomendados de tu ruta de aprendizaje en «Brechas y rutas».', datos: {} })],
   ['evaluador', 'Evaluador de competencias', 'Inteligencia artificial', '📝', 'Mide tu nivel con pruebas cortas y guarda tu progreso.', (ctx, msg) => {
-    const comp = ctx.datos.competencia || Object.keys(BANCO).find((c) => norm(msg).includes(norm(c.split(' ').pop()))) || 'Programación Python'
-    const pr = BANCO[comp] || BANCO['Programación Python']
+    const comp = ctx.datos.competencia || Object.keys(BANCO).find((c) => norm(msg).includes(norm(c.split(' ').pop()))) || 'Lenguajes de programación'
+    const pr = BANCO[comp] || BANCO['Lenguajes de programación']
     if (!ctx.datos.respuestas) return { texto: `Prueba de ${comp}: responde las ${pr.length} preguntas.`, datos: { competencia: comp, preguntas: pr.map(([texto, opciones]) => ({ texto, opciones })), disponibles: Object.keys(BANCO) } }
     const puntaje = Math.round((100 * pr.filter((p, i) => ctx.datos.respuestas[i] === p[2]).length) / pr.length)
     const nivel = puntaje >= 80 ? 'avanzado' : puntaje >= 50 ? 'intermedio' : 'básico'

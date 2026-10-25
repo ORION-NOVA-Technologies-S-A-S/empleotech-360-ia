@@ -7,8 +7,7 @@
   "sector": "Tecnología",
   "perfil": "Diseña, desarrolla y gestiona soluciones de software, redes e infraestructura tecnológica.",
   "competencias": [
-   "Programación Python",
-   "JavaScript / React",
+   "Lenguajes de programación",
    "Bases de datos SQL",
    "Redes y telecomunicaciones",
    "Ingeniería de software",
@@ -33,8 +32,7 @@
   "sector": "Tecnología",
   "perfil": "Construye aplicaciones web y móviles de calidad con metodologías ágiles.",
   "competencias": [
-   "Programación Python",
-   "JavaScript / React",
+   "Lenguajes de programación",
    "Ingeniería de software",
    "Bases de datos SQL",
    "Metodologías ágiles"
@@ -66,7 +64,7 @@
   ],
   "mercado": [
    "Automatización industrial",
-   "Programación Python",
+   "Lenguajes de programación",
    "Inglés B1+"
   ],
   "transversales": [
@@ -89,7 +87,7 @@
    "IoT y electrónica"
   ],
   "mercado": [
-   "Programación Python",
+   "Lenguajes de programación",
    "Mantenimiento industrial",
    "Inglés B1+"
   ],
@@ -366,7 +364,7 @@
    "Análisis de datos"
   ],
   "mercado": [
-   "Programación Python",
+   "Lenguajes de programación",
    "Power BI",
    "Inglés B1+"
   ],
@@ -433,7 +431,7 @@
    "Análisis de datos"
   ],
   "mercado": [
-   "Programación Python",
+   "Lenguajes de programación",
    "Power BI",
    "Inglés B1+"
   ],
@@ -1037,7 +1035,7 @@
    "Matemáticas aplicadas",
    "Estadística",
    "Modelado matemático",
-   "Programación Python"
+   "Lenguajes de programación"
   ],
   "mercado": [
    "Análisis de datos",
@@ -1058,7 +1056,7 @@
   "competencias": [
    "Estadística",
    "Análisis de datos",
-   "Programación Python",
+   "Lenguajes de programación",
    "Muestreo"
   ],
   "mercado": [
@@ -1080,7 +1078,7 @@
   "competencias": [
    "Modelado matemático",
    "Investigación científica",
-   "Programación Python"
+   "Lenguajes de programación"
   ],
   "mercado": [
    "Análisis de datos",
@@ -1120,8 +1118,7 @@
   "sector": "Tecnología",
   "perfil": "Desarrolla software web y móvil.",
   "competencias": [
-   "Programación Python",
-   "JavaScript / React",
+   "Lenguajes de programación",
    "Bases de datos SQL",
    "Metodologías ágiles"
   ],
@@ -1537,8 +1534,7 @@
   "sector": "Tecnología",
   "perfil": "Programa aplicaciones básicas.",
   "competencias": [
-   "Programación Python",
-   "JavaScript / React",
+   "Lenguajes de programación",
    "Bases de datos SQL"
   ],
   "mercado": [

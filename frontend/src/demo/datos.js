@@ -2,19 +2,11 @@
 export default {
  "competencias_demandadas": [
   {
-   "competencia": "Programación Python",
+   "competencia": "Lenguajes de programación",
    "sector": "Tecnología",
    "territorio": "Nacional",
    "demanda": 92,
    "tendencia": 14,
-   "es_ejemplo": true
-  },
-  {
-   "competencia": "JavaScript / React",
-   "sector": "Tecnología",
-   "territorio": "Nacional",
-   "demanda": 88,
-   "tendencia": 11,
    "es_ejemplo": true
   },
   {
@@ -106,7 +98,7 @@ export default {
    "es_ejemplo": true
   },
   {
-   "competencia": "Programación Python",
+   "competencia": "Lenguajes de programación",
    "sector": "Tecnología",
    "territorio": "Neiva",
    "demanda": 75,
@@ -149,7 +141,7 @@ export default {
  "cursos": [
   {
    "titulo": "Python desde cero",
-   "competencia": "Programación Python",
+   "competencia": "Lenguajes de programación",
    "nivel": "básico",
    "horas": 40,
    "modalidad": "virtual",
@@ -160,7 +152,7 @@ export default {
   },
   {
    "titulo": "React para principiantes",
-   "competencia": "JavaScript / React",
+   "competencia": "Lenguajes de programación",
    "nivel": "básico",
    "horas": 30,
    "modalidad": "virtual",
@@ -287,7 +279,7 @@ export default {
    "territorio": "Neiva",
    "sector": "Tecnología",
    "competencias": [
-    "Programación Python",
+    "Lenguajes de programación",
     "Trabajo en equipo"
    ],
    "salario_min": 2200000,

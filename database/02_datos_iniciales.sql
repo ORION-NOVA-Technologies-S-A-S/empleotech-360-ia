@@ -112,8 +112,7 @@ insert into indicadores_dane (periodo, periodo_nombre, nivel, territorio, depart
 on conflict do nothing;
 
 insert into competencias_demandadas (competencia, sector, territorio, demanda, tendencia) values
-  ('Programación Python','Tecnología','Nacional',92, 14),
-  ('JavaScript / React','Tecnología','Nacional',88, 11),
+  ('Lenguajes de programación','Tecnología','Nacional',92, 14),
   ('Análisis de datos','Tecnología','Nacional',90, 18),
   ('Ciberseguridad','Tecnología','Nacional',86, 21),
   ('Inteligencia artificial','Tecnología','Nacional',89, 35),
@@ -125,7 +124,7 @@ insert into competencias_demandadas (competencia, sector, territorio, demanda, t
   ('Turismo y hotelería','Turismo','Huila',72, 8),
   ('Seguridad industrial (HSE)','Hidrocarburos','Huila',71, 2),
   ('Análisis de datos','Tecnología','Neiva',78, 15),
-  ('Programación Python','Tecnología','Neiva',75, 13),
+  ('Lenguajes de programación','Tecnología','Neiva',75, 13),
   ('Comunicación asertiva','Transversal','Nacional',82, 4),
   ('Trabajo en equipo','Transversal','Nacional',81, 3),
   ('Excel avanzado','Administración','Neiva',79, 2),
@@ -133,8 +132,8 @@ insert into competencias_demandadas (competencia, sector, territorio, demanda, t
 on conflict do nothing;
 
 insert into cursos (titulo, competencia, nivel, horas, modalidad, proveedor, url, gratuito) values
-  ('Python desde cero','Programación Python','básico',40,'virtual','SENA Sofia Plus','https://oferta.senasofiaplus.edu.co',true),
-  ('React para principiantes','JavaScript / React','básico',30,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
+  ('Python desde cero','Lenguajes de programación','básico',40,'virtual','SENA Sofia Plus','https://oferta.senasofiaplus.edu.co',true),
+  ('React para principiantes','Lenguajes de programación','básico',30,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
   ('Análisis de datos con Python','Análisis de datos','intermedio',48,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',false),
   ('Fundamentos de ciberseguridad con ORI','Ciberseguridad','básico',24,'mixta','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
   ('IA aplicada a negocios','Inteligencia artificial','intermedio',36,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',false),
@@ -148,7 +147,7 @@ insert into cursos (titulo, competencia, nivel, horas, modalidad, proveedor, url
 on conflict do nothing;
 
 insert into vacantes (titulo, empresa, territorio, sector, competencias, salario_min, salario_max, modalidad) values
-  ('Desarrollador junior Python','Empresa ejemplo TIC','Neiva','Tecnología','{"Programación Python","Trabajo en equipo"}',2200000,3000000,'híbrido'),
+  ('Desarrollador junior Python','Empresa ejemplo TIC','Neiva','Tecnología','{"Lenguajes de programación","Trabajo en equipo"}',2200000,3000000,'híbrido'),
   ('Auxiliar de análisis de datos','Empresa ejemplo Servicios','Neiva','Tecnología','{"Análisis de datos","Excel avanzado"}',1900000,2500000,'presencial'),
   ('Analista SOC nivel 1','Empresa ejemplo Seguridad','Remoto','Tecnología','{"Ciberseguridad","Inglés B1+"}',2800000,3800000,'remoto'),
   ('Asesor comercial digital','Empresa ejemplo Comercio','Huila','Comercio','{"Servicio al cliente","Marketing digital","Comunicación asertiva"}',1500000,2000000,'presencial'),

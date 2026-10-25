@@ -261,3 +261,12 @@ th { background: var(--fondo-2); color: var(--tenue); font-weight: 600; }
   .heroe-personajes { flex-wrap: wrap; }
   .ori-lado .burbuja-personaje { max-width: 160px; }
 }
+
+/* Competencias agrupadas por área */
+.grupo-comp { display: grid; grid-template-columns: 230px 1fr; gap: 10px; align-items: center; padding: 4px 0; border-bottom: 1px dashed var(--borde); }
+.grupo-comp:last-child { border-bottom: 0; }
+.grupo-comp .chips { margin: 6px 0; }
+.grupo-nombre { font-size: .85rem; color: var(--plata); font-weight: 600; }
+.chip-detalle { color: var(--tenue); font-size: .75rem; }
+.chip.on .chip-detalle { color: #dfe6ff; }
+@media (max-width: 860px) { .grupo-comp { grid-template-columns: 1fr; gap: 0; } }

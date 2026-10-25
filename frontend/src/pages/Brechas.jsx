@@ -2,6 +2,17 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { api } from '../api.js'
 import { Barras, Kpi } from '../components/Graficos.jsx'
 import SelectorTerritorio from '../components/SelectorTerritorio.jsx'
+import GRUPOS from '../../../database/datos/grupos_competencias.json'
+
+// Agrupa competencias por área (p. ej. «Lenguajes de programación» → Desarrollo de software)
+const GRUPO_DE = Object.fromEntries(Object.entries(GRUPOS.grupos).flatMap(([g, l]) => l.map((c) => [c, g])))
+const DETALLE = GRUPOS.detalle
+const ORDEN = Object.keys(GRUPOS.grupos)
+const agrupar = (lista) => {
+  const m = new Map()
+  lista.forEach((c) => { const g = GRUPO_DE[c] || 'Otras competencias'; m.set(g, [...(m.get(g) || []), c]) })
+  return [...m.entries()].sort((a, b) => ORDEN.indexOf(a[0]) - ORDEN.indexOf(b[0]))
+}
 
 const pesos = (v) => '$' + Math.round(v).toLocaleString('es-CO')
 const NIVELES = ['Todos', 'Profesional', 'Tecnólogo', 'Técnico']
@@ -84,9 +95,15 @@ export default function Brechas({ usuario }) {
           {[['De la carrera', carrera.competencias], ['Lo que además pide el mercado', carrera.mercado], ['Transversales', carrera.transversales]].map(([t, l]) => (
             <div key={t}>
               <h3 className="area">{t}</h3>
-              <div className="chips">{l.map((c) => (
-                <button key={c} className={`chip ${mias.includes(c) ? 'on' : ''}`} onClick={() => alternar(c)} aria-pressed={mias.includes(c)}>{mias.includes(c) ? '✓ ' : ''}{c}</button>
-              ))}</div>
+              {agrupar(l).map(([grupo, comps]) => (
+                <div className="grupo-comp" key={grupo}>
+                  <span className="grupo-nombre">{grupo}</span>
+                  <div className="chips">{comps.map((c) => (
+                    <button key={c} className={`chip ${mias.includes(c) ? 'on' : ''}`} onClick={() => alternar(c)} aria-pressed={mias.includes(c)}
+                      title={DETALLE[c] || undefined}>{mias.includes(c) ? '✓ ' : ''}{c}{DETALLE[c] && <small className="chip-detalle"> · {DETALLE[c]}</small>}</button>
+                  ))}</div>
+                </div>
+              ))}
             </div>
           ))}
           <p className="tenue">Llevas {mias.filter((m) => lista.includes(m)).length} de {lista.length} competencias del perfil.</p>

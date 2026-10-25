@@ -137,7 +137,7 @@ class AnalizadorPerfil(Agente):
     descripcion = "Lee tu experiencia en texto libre y extrae las competencias que ya tienes."
     sistema = "Eres un reclutador que identifica competencias en la descripción que hace un joven de sí mismo."
 
-    SINONIMOS = {"python": "Programación Python", "react": "JavaScript / React", "javascript": "JavaScript / React",
+    SINONIMOS = {"python": "Lenguajes de programación", "programacion": "Lenguajes de programación", "react": "Lenguajes de programación", "javascript": "Lenguajes de programación",
                  "datos": "Análisis de datos", "excel": "Excel avanzado", "ingles": "Inglés B1+",
                  "seguridad informatica": "Ciberseguridad", "arduino": "IoT y electrónica",
                  "ventas": "Servicio al cliente", "redes sociales": "Marketing digital",
@@ -203,7 +203,7 @@ class Tutor(Agente):
 
 # 9 ─────────────────────────────────────────── Evaluador de competencias
 BANCO = {
-    "Programación Python": [
+    "Lenguajes de programación": [
         ("¿Qué imprime print(2 ** 3)?", ["6", "8", "9"], 1),
         ("¿Qué estructura guarda pares clave-valor?", ["lista", "tupla", "diccionario"], 2),
         ("¿Con qué palabra se define una función?", ["func", "def", "function"], 1)],
@@ -224,8 +224,8 @@ class Evaluador(Agente):
     descripcion = "Mide tu nivel con pruebas cortas y guarda tu progreso."
 
     async def preparar(self, ctx, mensaje):
-        comp = ctx.datos.get("competencia") or next((c for c in BANCO if normalizar(c.split()[-1]) in normalizar(mensaje)), "Programación Python")
-        preguntas = BANCO.get(comp, BANCO["Programación Python"])
+        comp = ctx.datos.get("competencia") or next((c for c in BANCO if normalizar(c.split()[-1]) in normalizar(mensaje)), "Lenguajes de programación")
+        preguntas = BANCO.get(comp, BANCO["Lenguajes de programación"])
         respuestas = ctx.datos.get("respuestas")
         if respuestas is None:
             return (f"Prueba de {comp}: responde las {len(preguntas)} preguntas.",

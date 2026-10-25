@@ -1,0 +1,209 @@
+{
+ "grupos": {
+  "Desarrollo de software": [
+   "Lenguajes de programación",
+   "Bases de datos SQL",
+   "Ingeniería de software",
+   "Metodologías ágiles",
+   "DevOps",
+   "Diseño UX/UI",
+   "Programación de microcontroladores"
+  ],
+  "Infraestructura, redes y nube": [
+   "Redes y telecomunicaciones",
+   "Computación en la nube",
+   "Administración de servidores",
+   "Soporte técnico",
+   "Mantenimiento de computadores"
+  ],
+  "Ciberseguridad": [
+   "Ciberseguridad",
+   "Gestión de incidentes",
+   "Derecho digital y protección de datos"
+  ],
+  "Datos e inteligencia artificial": [
+   "Análisis de datos",
+   "Inteligencia artificial",
+   "Power BI",
+   "Estadística",
+   "Econometría",
+   "Muestreo",
+   "Modelado matemático",
+   "Matemáticas aplicadas",
+   "Sistemas de información geográfica"
+  ],
+  "Tecnologías emergentes": [
+   "IoT y electrónica",
+   "Robótica",
+   "Realidad virtual",
+   "Agricultura de precisión",
+   "Telemedicina",
+   "Tecnologías educativas"
+  ],
+  "Electrónica, energía y automatización": [
+   "Electrónica y circuitos",
+   "Sistemas de control",
+   "Automatización industrial",
+   "Instalaciones eléctricas (RETIE)",
+   "Sistemas eléctricos de potencia",
+   "Energías renovables",
+   "Transición energética",
+   "Termodinámica"
+  ],
+  "Industria, producción y calidad": [
+   "Manufactura",
+   "Mantenimiento industrial",
+   "Lean manufacturing",
+   "Gestión de calidad",
+   "Control de calidad",
+   "Gestión de procesos",
+   "Procesos químicos",
+   "Logística y cadena de suministro",
+   "Inventarios"
+  ],
+  "Construcción y diseño técnico": [
+   "Diseño CAD",
+   "BIM",
+   "Diseño estructural",
+   "Diseño arquitectónico",
+   "Modelado 3D",
+   "Urbanismo",
+   "Topografía",
+   "Gestión de obras",
+   "Presupuestos de obra"
+  ],
+  "Hidrocarburos": [
+   "Ingeniería de yacimientos",
+   "Perforación",
+   "Producción de hidrocarburos"
+  ],
+  "Seguridad y salud en el trabajo": [
+   "Seguridad industrial (HSE)",
+   "Seguridad y salud en el trabajo",
+   "Bioseguridad",
+   "Gestión de riesgos"
+  ],
+  "Salud": [
+   "Atención clínica",
+   "Diagnóstico médico",
+   "Urgencias",
+   "Cuidado del paciente",
+   "Administración de medicamentos",
+   "Salud pública",
+   "Odontología restauradora",
+   "Rehabilitación física",
+   "Evaluación funcional",
+   "Actividad física",
+   "Nutrición clínica",
+   "Laboratorio clínico",
+   "Servicio farmacéutico",
+   "Gestión de consultorio",
+   "Evaluación psicológica",
+   "Intervención clínica",
+   "Psicología organizacional"
+  ],
+  "Agro, ambiente y veterinaria": [
+   "Manejo de cultivos",
+   "Agroindustria del café",
+   "Catación de café",
+   "Suelos y fertilización",
+   "Sanidad vegetal",
+   "Poscosecha",
+   "Riego y drenaje",
+   "Maquinaria agrícola",
+   "Gestión de fincas",
+   "Producción animal",
+   "Nutrición animal",
+   "Sanidad animal",
+   "Clínica veterinaria",
+   "Bienestar animal",
+   "Gestión ambiental",
+   "Tratamiento de aguas",
+   "Normativa ambiental",
+   "Economía circular",
+   "Biodiversidad",
+   "Seguridad alimentaria"
+  ],
+  "Administración, finanzas y contabilidad": [
+   "Gestión administrativa",
+   "Planeación estratégica",
+   "Finanzas",
+   "Contabilidad básica",
+   "NIIF",
+   "Tributaria",
+   "Auditoría",
+   "Software contable",
+   "Facturación electrónica",
+   "Nómina",
+   "Talento humano",
+   "Gestión documental",
+   "Gestión de proyectos",
+   "Formulación de proyectos",
+   "Análisis económico",
+   "Excel avanzado"
+  ],
+  "Comercio y marketing": [
+   "Ventas",
+   "Servicio al cliente",
+   "Negociación",
+   "Marketing digital",
+   "Investigación de mercados",
+   "Comercio electrónico",
+   "Comercio exterior",
+   "Creación de contenido",
+   "Branding",
+   "Revenue management"
+  ],
+  "Derecho y sector público": [
+   "Derecho civil",
+   "Derecho laboral",
+   "Litigio",
+   "Redacción jurídica",
+   "Contratación estatal",
+   "Gestión pública",
+   "Normativa pública",
+   "Normativa laboral"
+  ],
+  "Educación y ciencias sociales": [
+   "Pedagogía",
+   "Didáctica",
+   "Desarrollo infantil",
+   "Planeación educativa",
+   "Entrenamiento deportivo",
+   "Investigación social",
+   "Análisis cualitativo",
+   "Intervención comunitaria",
+   "Investigación científica",
+   "Laboratorio"
+  ],
+  "Turismo y gastronomía": [
+   "Turismo y hotelería",
+   "Guianza turística",
+   "Cocina",
+   "Manipulación de alimentos",
+   "Costeo de recetas"
+  ],
+  "Artes y diseño": [
+   "Diseño gráfico",
+   "Ilustración digital",
+   "Diseño de modas",
+   "Patronaje",
+   "Tendencias de moda",
+   "Interpretación musical",
+   "Producción musical",
+   "Teoría musical",
+   "Producción audiovisual"
+  ],
+  "Comunicación e idiomas": [
+   "Comunicación asertiva",
+   "Trabajo en equipo",
+   "Redacción",
+   "Inglés B1+",
+   "Inglés C1",
+   "Traducción"
+  ]
+ },
+ "detalle": {
+  "Lenguajes de programación": "Python, JavaScript, Java, C#, entre otros"
+ }
+}
