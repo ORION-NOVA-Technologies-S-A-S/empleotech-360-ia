@@ -42,7 +42,7 @@ export default function Inicio() {
             inteligencia artificial, a desarrollar las competencias que el mercado está pidiendo hoy.</p>
           <div className="acciones">
             <a className="btn" href="#/brechas">Evaluar mi carrera</a>
-            <a className="btn btn-sec" href="#/cuenta">Crear mi cuenta</a>
+            <a className="btn btn-sec" href="#/cuenta?modo=registro">Crear mi cuenta</a>
           </div>
         </div>
         <div className="heroe-personajes">

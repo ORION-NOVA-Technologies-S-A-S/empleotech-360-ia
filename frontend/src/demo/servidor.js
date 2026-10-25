@@ -5,7 +5,7 @@
  * de los 17 agentes. En producción se usa el backend FastAPI + PostgreSQL/Supabase.
  */
 import D from './datos.js'
-import { CARRERAS, DEPARTAMENTOS, brechas, carreraPorId, consultaDane, conversarNova, demandaLista, detectarTerritorio, emparejar, rutaPara, valor } from './logica.js'
+import { CARRERAS, DEPARTAMENTOS, brechas, carreraPorId, consultaDane, conversarNova, demandaLista, detectarTerritorio, ACADEMIA, GRUPO_DE, TEMAS, analizarHojaVida, clase, detectarTema, emparejar, rutaPara, valor } from './logica.js'
 
 const norm = (t) => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
 const store = {
@@ -28,7 +28,6 @@ function auditar(evento, severidad = 'info', detalle = {}) {
 
 // ---------------- Analítica (lógica compartida) ----------------
 const territoriosDe = (b) => [b.municipio, b.departamento, b.territorio, 'Nacional'].filter(Boolean)
-const AVISO_DEM = ' (El índice de demanda por competencia es de EJEMPLO hasta conectar fuentes de vacantes.)'
 const pct = (f) => (f ? `${String(f.valor).replace('.', ',')}%` : '—')
 
 // ---------------- Los 17 agentes ----------------
@@ -56,19 +55,21 @@ const AGENTES = [
     const t = norm(msg)
     const { departamento: dep, municipio: mun } = detectarTerritorio(msg, ctx.datos.departamento, ctx.datos.municipio)
     const c = consultaDane(dep, mun)
-    const L = [`🇨🇴 Nacional: desempleo ${pct(valor(c.nacional, 'TD'))} en 2025; jóvenes de 15 a 28 años ${pct(valor(c.nacional, 'TD', 'Jóvenes 15-28'))} (may–jul 2026); el ${pct(valor(c.nacional, 'NiNi', 'Jóvenes 15-28'))} de los jóvenes ni estudia ni trabaja.`]
+    const L = [`Colombia: desempleo ${pct(valor(c.nacional, 'TD'))} en 2025; jóvenes de 15 a 28 años ${pct(valor(c.nacional, 'TD', 'Jóvenes 15-28'))} (may–jul 2026); el ${pct(valor(c.nacional, 'NiNi', 'Jóvenes 15-28'))} de los jóvenes ni estudia ni trabaja.`]
     if (c.departamento.length) L.push(`📍 ${dep}: desempleo ${pct(valor(c.departamento, 'TD'))}, ocupación ${pct(valor(c.departamento, 'TO'))} y participación ${pct(valor(c.departamento, 'TGP'))} (año 2025).`)
     if (c.municipio.length) L.push(`🏙️ ${mun}: desempleo ${pct(valor(c.municipio, 'TD'))} (oct–dic 2025).${c.municipio[0].nota ? ' ' + c.municipio[0].nota : ''}`)
-    if (!dep) L.push('Dime tu departamento o municipio y te muestro sus cifras. Ejemplo: «desempleo en el Huila».')
+    if (!dep) L.push('Dime tu departamento o municipio y te muestro sus cifras. Ejemplo: desempleo en el Huila.')
     return { texto: L.concat(c.avisos).join('\n') + '\nFuente: DANE – GEIH.', datos: { ...c, acciones: [{ label: 'Ver gráficos DANE', href: '#/dane' }] } }
   }],
   ['brechas', 'Detector de brechas laborales', 'Analítica', '🎯', 'Compara el perfil de tu carrera y tus competencias con lo que pide el mercado.', (ctx) => {
     const carrera = carreraPorId(ctx.datos.carrera)
     const r = brechas({ competencias: ctx.competencias, carrera, territorios: territoriosDe({ ...ctx.datos, territorio: ctx.territorio }) })
-    let t = (carrera ? `Para ${carrera.nombre}, ` : 'Frente a la demanda general, ') + `tu cobertura es ${r.cobertura}%. Tus 5 brechas prioritarias:\n` +
-      r.brechas.slice(0, 5).map((b, i) => `${i + 1}. ${b.competencia} (${b.tipo.toLowerCase()})`).join('\n') + AVISO_DEM
-    if (!ctx.competencias.length) t = 'Aún no me has dicho qué competencias dominas, así que las tomo todas como brecha. ' + t
-    if (!carrera) t += '\nCuéntame qué estudias (por ejemplo «estudio contaduría») para evaluarte con el perfil de tu carrera.'
+    const grupos = {}
+    r.brechas.slice(0, 8).forEach((b) => (grupos[GRUPO_DE[b.competencia] || 'Otras competencias'] ||= []).push(b.competencia))
+    let t = (carrera ? `🎯 ${carrera.nombre}: ` : '🎯 Frente a lo que más pide el mercado, ') + `tu cobertura es ${String(r.cobertura).replace('.', ',')}%.\nLo que más te conviene fortalecer, por área:\n` +
+      Object.entries(grupos).map(([g, l]) => `• ${g}: ${l.join(', ')}`).join('\n')
+    if (!ctx.competencias.length) t += '\nTodavía no me has dicho qué dominas; márcalo en Brechas y rutas para afinar el resultado.'
+    if (!carrera) t += '\nCuéntame qué estudias (por ejemplo: estudio contaduría) y te evalúo con el perfil de tu carrera.'
     return { texto: t, datos: { ...r, acciones: [{ label: 'Evaluar en detalle', href: '#/brechas' + (carrera ? '?carrera=' + carrera.id : '') }] } }
   }],
   ['perfil', 'Analizador de perfil', 'Inteligencia artificial', '🧑‍💼', 'Lee tu experiencia en texto libre y extrae las competencias que ya tienes.', (ctx, msg) => {
@@ -77,17 +78,33 @@ const AGENTES = [
     const l = [...enc].sort()
     return { texto: l.length ? `Identifiqué estas competencias en tu perfil: ${l.join(', ')}. Puedes guardarlas en tu perfil.` : 'No identifiqué competencias aún. Cuéntame qué has estudiado, en qué has trabajado y qué herramientas usas.', datos: { competencias_detectadas: l } }
   }],
-  ['tendencias', 'Radar de tendencias laborales', 'Analítica', '📈', 'Detecta las competencias que más crecen en demanda.', (ctx) => {
-    const top = [...demandaLista(territoriosDe(ctx.datos))].sort((a, b) => b.tendencia - a.tendencia).slice(0, 6)
-    return { texto: 'Competencias con mayor crecimiento:\n' + lista(top.map((f) => `${f.competencia} (${f.sector}): +${f.tendencia}%`)), datos: { tendencias: top } }
+  ['tendencias', 'Radar de tendencias laborales', 'Analítica', '📈', 'Muestra qué áreas y competencias crecen más y qué carreras tienen más futuro.', (ctx) => {
+    const top = [...demandaLista(territoriosDe(ctx.datos))].sort((a, b) => b.tendencia - a.tendencia).slice(0, 8)
+    const grupos = {}
+    top.forEach((f) => (grupos[GRUPO_DE[f.competencia] || 'Otras competencias'] ||= []).push(`${f.competencia} ↑${f.tendencia}%`))
+    const calientes = top.slice(0, 4).map((f) => f.competencia)
+    const futuro = CARRERAS.map((c) => [c, [...c.competencias, ...c.mercado].filter((x) => calientes.includes(x)).length]).filter(([, n]) => n > 1)
+      .sort((a, b) => b[1] - a[1]).slice(0, 4).map(([c]) => c.nombre)
+    return { texto: '📈 Áreas que más están creciendo en demanda:\n' + Object.entries(grupos).map(([g, l]) => `• ${g}: ${l.join(', ')}`).join('\n') +
+      (futuro.length ? `\n\n🎓 Carreras que aprovechan estas tendencias: ${futuro.join(', ')}.` : '') +
+      '\n\nConsejo de NOVA: suma al menos una competencia de Datos e inteligencia artificial, sin importar tu carrera.',
+    datos: { tendencias: top, sugerencias: ['Clase de inteligencia artificial', '¿Qué competencias me faltan?'], acciones: [{ label: 'Ver cursos en Orion Nova Academy', href: ACADEMIA }] } }
   }],
-  ['rutas', 'Diseñador de rutas de aprendizaje', 'Inteligencia artificial', '🗺️', 'Convierte tus brechas en un plan de cursos ordenado (gratis primero).', (ctx) => {
+  ['rutas', 'Diseñador de rutas de aprendizaje', 'Inteligencia artificial', '🗺️', 'Convierte tus brechas en un plan de cursos en Orion Nova Academy.', (ctx) => {
     const ruta = rutaPara(brechas({ competencias: ctx.competencias, carrera: carreraPorId(ctx.datos.carrera), territorios: territoriosDe(ctx.datos) }).brechas), horas = ruta.reduce((s, r) => s + (r.cursos[0]?.horas || 0), 0)
-    return { texto: `Tu ruta de ${ruta.length} etapas (~${horas} horas; a 6 h/semana son unas ${Math.max(1, Math.floor(horas / 6))} semanas):\n` +
-      ruta.map((r, i) => `Etapa ${i + 1}: ${r.competencia} → ` + (r.cursos[0] ? `${r.cursos[0].titulo} (${r.cursos[0].proveedor}, ${r.cursos[0].horas} h)` : 'buscando curso')).join('\n'), datos: { ruta, horas_totales: horas } }
+    return { texto: `🗺️ Tu ruta en Orion Nova Academy: ${ruta.length} etapas, unas ${horas} horas (a 6 h por semana, cerca de ${Math.max(1, Math.round(horas / 6))} semanas).\n` +
+      ruta.map((r, i) => `Etapa ${i + 1}: ${r.cursos[0].titulo} (${r.cursos[0].horas} h${r.cursos[0].gratuito ? ', gratis' : ''})`).join('\n') + '\nAl terminar recibes el certificado de Orion Nova Technologies.',
+    datos: { ruta, horas_totales: horas, acciones: [{ label: 'Ir a Orion Nova Academy', href: ACADEMIA }] } }
   }],
-  ['tutor', 'Tutor IA personalizado', 'Inteligencia artificial', '🎓', 'Explica temas técnicos paso a paso, con ejemplos de la vida real.', () => ({
-    texto: 'Con gusto te explico. En la versión con servidor, el Tutor redacta explicaciones con IA generativa. Mientras tanto, revisa los cursos recomendados de tu ruta de aprendizaje en «Brechas y rutas».', datos: {} })],
+  ['tutor', 'Tutor IA · Clases con NOVA', 'Inteligencia artificial', '🎓', 'NOVA te da clases cortas: concepto, ejemplo y mini reto.', (ctx, msg) => {
+    const m = msg.match(/continuar clase de (.+) \((\d+)\/\d+\)/i)
+    if (m && TEMAS.includes(m[1])) return clase(m[1], Number(m[2]) - 1)
+    const tema = detectarTema(msg)
+    if (tema) return clase(tema, 0)
+    return { texto: `¡Hola${ctx.datos.nombre ? ', ' + ctx.datos.nombre : ''}! Soy NOVA y hoy soy tu profe 🎓. Cada clase tiene 3 partes: concepto, ejemplo y mini reto. ¿Qué tema quieres aprender?`,
+      datos: { sugerencias: TEMAS.map((x) => 'Clase de ' + x) } }
+  }],
+
   ['evaluador', 'Evaluador de competencias', 'Inteligencia artificial', '📝', 'Mide tu nivel con pruebas cortas y guarda tu progreso.', (ctx, msg) => {
     const comp = ctx.datos.competencia || Object.keys(BANCO).find((c) => norm(msg).includes(norm(c.split(' ').pop()))) || 'Lenguajes de programación'
     const pr = BANCO[comp] || BANCO['Lenguajes de programación']
@@ -105,8 +122,21 @@ const AGENTES = [
     const p = ['Háblame de ti en 1 minuto.', 'Cuéntame de un problema que resolviste.', '¿Por qué quieres este cargo?', '¿Cuál es un aspecto que estás mejorando?', '¿Dónde te ves en 2 años?']
     return { texto: 'Practiquemos 🎤. Responde usando STAR: Situación, Tarea, Acción y Resultado.\n' + p.map((x, i) => `${i + 1}. ${x}`).join('\n'), datos: {} }
   }],
-  ['hoja_vida', 'Generador de hoja de vida', 'Inteligencia artificial', '📄', 'Arma tu hoja de vida con las palabras clave que buscan las empresas.', (ctx) => ({
-    texto: `PERFIL PROFESIONAL\nJoven de ${ctx.territorio} con formación en ${ctx.perfil.nivel_educativo || '[tu nivel educativo]'}, interesado en ${ctx.perfil.area_interes || '[tu área]'}. Competencias: ${ctx.competencias.join(', ') || '[agrega tus competencias]'}.\n\nEXPERIENCIA\n• [Cargo] – [Empresa] – [Fechas]: logro medible (ej.: reduje tiempos un 20%).\n\nFORMACIÓN\n• [Programa] – [Institución] – [Año]\n\nCERTIFICADOS EmpleoTech 360 IA\n• [se agregan al completar tu ruta]`, datos: {} })],
+  ['hoja_vida', 'Revisor de hoja de vida', 'Inteligencia artificial', '📄', 'Sube tu hoja de vida y NOVA te dice qué mejorar y qué fortalecer para el mercado.', (ctx, msg) => {
+    const cv = ctx.datos.hoja_vida_texto || (msg.trim().split(/\s+/).length > 60 ? msg : '')
+    if (!cv) return { texto: '📄 Sube tu hoja de vida (PDF, Word o texto) con el botón 📎 y la reviso por ti: te digo qué competencias tienes, qué debes fortalecer para el mercado laboral y cómo mejorar su presentación. Tu archivo se lee en tu navegador y no se guarda.',
+      datos: { pedir_hoja_vida: true } }
+    const r = analizarHojaVida(cv, ctx.datos.carrera)
+    const grupos = {}
+    r.fortalecer.slice(0, 8).forEach((c) => (grupos[GRUPO_DE[c] || 'Otras competencias'] ||= []).push(c))
+    const L = [`📄 Revisé tu hoja de vida (${r.palabras} palabras). Puntaje: ${r.puntaje}/100.`]
+    if (r.carrera) L.push(`La comparé con el perfil de ${r.carrera.nombre}.`)
+    L.push(r.encontradas.length ? `✅ Competencias que encontré: ${r.encontradas.join(', ')}.` : '✅ No encontré competencias claras; nómbralas en una sección de habilidades.')
+    if (r.fortalecer.length) L.push('💪 Para el mercado laboral te conviene fortalecer:\n' + Object.entries(grupos).map(([g, l]) => `• ${g}: ${l.join(', ')}`).join('\n'))
+    if (r.mejorar.length) L.push('✍️ Para mejorar tu hoja de vida:\n' + r.mejorar.map((x) => '• ' + x).join('\n'))
+    return { texto: L.join('\n'), datos: { analisis_hoja_vida: r, acciones: [{ label: 'Ver mi ruta en Orion Nova Academy', href: ACADEMIA }],
+      sugerencias: r.fortalecer.filter((c) => TEMAS.includes(c)).slice(0, 2).map((c) => 'Clase de ' + c) } }
+  }],
   ['orientador', 'Orientador vocacional', 'Inteligencia artificial', '🧭', 'Relaciona tus gustos con carreras y sectores que contratan.', (ctx, msg) => {
     const t = norm(msg)
     const GUSTOS = [[/persona|ayudar|gente|social|ensen/, ['Salud', 'Educación', 'Sector público', 'Turismo']], [/dato|numero|matemat|analiz/, ['Tecnología', 'Administración', 'Servicios financieros']],
@@ -120,9 +150,9 @@ const AGENTES = [
       datos: { sugerencias: opciones.slice(0, 3).map((c) => 'Quiero estudiar ' + c.nombre.toLowerCase()) } }
   }],
   ['blandas', 'Mentor de habilidades blandas', 'Inteligencia artificial', '💬', 'Entrena comunicación, trabajo en equipo, liderazgo y manejo del estrés.', () => ({
-    texto: 'Reto de la semana 💬:\n• Lunes: escucha activa — repite con tus palabras lo que te dijeron.\n• Miércoles: presenta una idea en 60 segundos.\n• Viernes: pide retroalimentación a alguien.\nPractícalo también en el escenario de realidad virtual «Entrevista de trabajo».', datos: {} })],
+    texto: 'Reto de la semana 💬:\n• Lunes: escucha activa — repite con tus palabras lo que te dijeron.\n• Miércoles: presenta una idea en 60 segundos.\n• Viernes: pide retroalimentación a alguien.\nPractícalo también en el escenario de realidad virtual Entrevista de trabajo.', datos: {} })],
   ['vr', 'Laboratorio de realidad virtual', 'Realidad virtual', '🥽', 'Simulaciones inmersivas (WebXR) para practicar trabajos reales.', () => ({
-    texto: 'Escenarios de realidad virtual disponibles (funcionan en celular, PC o visor VR):\n' + lista(ESCENARIOS_VR.map(([t, c, m]) => `${t} – ${c} (${m} min)`)) + '\nÁbrelos en la sección «Realidad virtual».', datos: {} })],
+    texto: 'Escenarios de realidad virtual disponibles (funcionan en celular, PC o visor VR):\n' + lista(ESCENARIOS_VR.map(([t, c, m]) => `${t} – ${c} (${m} min)`)) + '\nÁbrelos en la sección Realidad virtual.', datos: {} })],
   ['iot', 'Monitor IoT de sedes', 'IoT', '📡', 'Vigila kioscos, sensores de aula y lectores de asistencia en las sedes.', () => ({
     texto: 'Estado IoT (últimas 24 h, simulado):\n' + lista(iotResumen().map((d) => `${d.nombre} (${d.sede}): ${d.metrica} ${d.promedio}`)), datos: {} })],
   ['impacto', 'Analítica de impacto', 'Analítica', '🏆', 'Mide el impacto de la plataforma: jóvenes formados, brechas cerradas y empleabilidad.', () => {
@@ -133,12 +163,13 @@ const AGENTES = [
 ].map(([id, nombre, area, icono, descripcion, fn]) => ({ id, nombre, area, icono, descripcion, solo_admin: false, fn }))
 
 const RUTAS_NOVA = [
+  [/\bclase\b|ens[eé][nñ]ame sobre/i, 'tutor'], [/hoja de vida|curr[ií]cul/i, 'hoja_vida'],
   [/brecha|me falta|qu[eé] necesito|competencias? (pide|piden|demanda)/i, 'brechas'], [/dane|desempleo|ocupaci[oó]n|informalidad|ninis?|estad[ií]stica/i, 'dane'],
   [/vocaci|qu[eé] estudiar|no s[eé] qu[eé]|me gusta/i, 'orientador'],
   [/vacante|empleo|trabajo|oferta|contrat/i, 'vacantes'], [/ruta|aprender|estudiar|curso|capacitar/i, 'rutas'], [/entrevista/i, 'entrevistas'],
   [/hoja de vida|cv|curr[ií]cul/i, 'hoja_vida'], [/evaluar|examen|test|prueba/i, 'evaluador'],
   [/tendencia|futuro|crece/i, 'tendencias'], [/realidad virtual|vr|simulaci/i, 'vr'], [/iot|sensor|dispositivo|kiosco/i, 'iot'],
-  [/segur|hack|estafa|phishing|contrase/i, 'ori'], [/blandas|comunicaci|liderazgo|equipo/i, 'blandas'], [/explica|qu[eé] es|c[oó]mo funciona|ens[eé][nñ]ame/i, 'tutor'], [/emprend|negocio propio/i, 'orientador'],
+  [/segur|hack|estafa|phishing|contrase/i, 'ori'], [/blandas|comunicaci|liderazgo|equipo/i, 'blandas'], [/clase|explica|qu[eé] es|c[oó]mo funciona|ens[eé][nñ]ame|aprender sobre/i, 'tutor'], [/emprend|negocio propio/i, 'orientador'],
 ]
 function ejecutar(id, ctx, msg) {
   let a = AGENTES.find((x) => x.id === id) || err(404, `No existe el agente '${id}'.`), derivado

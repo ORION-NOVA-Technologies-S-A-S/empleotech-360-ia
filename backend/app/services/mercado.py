@@ -59,9 +59,9 @@ async def ruta_para(brechas: list[dict], limite: int = 6) -> list[dict]:
                order by gratuito desc, case nivel when 'básico' then 1 when 'intermedio' then 2 else 3 end""",
             b["competencia"])
         if not cursos:
-            cursos = [{"id": "sena-" + normalizar(b["competencia"]), "titulo": f"Buscar «{b['competencia']}» en SENA Sofia Plus",
-                       "nivel": "básico", "horas": 40, "modalidad": "virtual", "proveedor": "SENA Sofia Plus",
-                       "url": "https://oferta.senasofiaplus.edu.co", "gratuito": True, "sugerido": True}]
+            cursos = [{"id": "academia-" + normalizar(b["competencia"]), "titulo": f"{b['competencia']} en Orion Nova Academy",
+                       "nivel": "básico", "horas": 30, "modalidad": "virtual", "proveedor": "Orion Nova Academy",
+                       "url": "https://academy.orionnovatechnologies.com", "gratuito": True, "sugerido": True}]
         ruta.append({"competencia": b["competencia"], "prioridad": b["prioridad"], "cursos": cursos})
     return ruta
 

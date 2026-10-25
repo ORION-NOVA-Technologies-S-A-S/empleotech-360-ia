@@ -21,6 +21,10 @@ EmpleoTech 360 IA identifica las **brechas laborales** de cada territorio con da
 **https://empleotech.orionnovatechnologies.com** (GitHub Pages; se publica sola con cada cambio en `main`).
 La demo funciona en el navegador: NOVA conversa, recuerda tu nombre y tu carrera; ORI (el mismo de ORION CORE) da consejos y bloquea manipulaciones.
 
+## Acceso
+
+Botones **Iniciar sesión** y **Registrarse** en la cabecera, con ORI guiando la seguridad de la contraseña (Argon2id, bloqueo por intentos y autorización de la Ley 1581). En la demo de GitHub Pages las cuentas viven solo en el navegador; en producción, en PostgreSQL/Supabase.
+
 ## Carreras, territorios y datos del DANE
 
 - `database/datos/carreras.json`: **73 carreras y programas** (profesionales, tecnólogos y técnicos) con su perfil, las competencias de la carrera, lo que además pide el mercado y las transversales. Se pueden agregar más editando el archivo.
@@ -42,12 +46,12 @@ La demo funciona en el navegador: NOVA conversa, recuerda tu nombre y tu carrera
 | 4 | Detector de brechas | Analítica | Perfil de la carrera + lo que pide el mercado vs. lo que el joven domina |
 | 5 | Analizador de perfil | IA | Extrae competencias de un texto libre |
 | 6 | Radar de tendencias | Analítica | Competencias que más crecen |
-| 7 | Diseñador de rutas | IA | Brechas → plan de cursos (gratis primero) |
-| 8 | Tutor IA | IA | Explica temas paso a paso |
+| 7 | Diseñador de rutas | IA | Brechas → plan de cursos en **Orion Nova Academy** |
+| 8 | Tutor IA · **Clases con NOVA** | IA | Clases cortas: concepto, ejemplo y mini reto (`database/datos/lecciones.json`) |
 | 9 | Evaluador de competencias | IA | Pruebas cortas y registro de puntaje |
 | 10 | Emparejador de vacantes | IA | % de afinidad y qué falta para cada vacante |
 | 11 | Coach de entrevistas | IA | Simulación con método STAR |
-| 12 | Generador de hoja de vida | IA | Borrador con palabras clave |
+| 12 | Revisor de hoja de vida | IA | El joven sube su hoja de vida (PDF, Word o texto); NOVA dice qué fortalecer y cómo mejorarla. El archivo se lee en el navegador |
 | 13 | Orientador vocacional | IA | Gustos ↔ carreras y sectores con demanda |
 | 14 | Mentor de habilidades blandas | IA | Retos de comunicación y trabajo en equipo |
 | 15 | Laboratorio VR | Realidad virtual | Escenarios inmersivos |

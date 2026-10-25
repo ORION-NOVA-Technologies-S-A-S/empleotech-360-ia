@@ -70,3 +70,24 @@ def detectar_territorio(texto: str, dep_actual: str | None = None, mun_actual: s
             mun, dep = cands[0], d["departamento"]
             break
     return (dep or (None if mun else dep_actual)), (mun or (None if dep else mun_actual))
+
+
+ACADEMIA = "https://academy.orionnovatechnologies.com"
+
+
+@lru_cache
+def lecciones() -> dict[str, list[str]]:
+    return json.loads((DATOS_DIR / "lecciones.json").read_text(encoding="utf-8"))
+
+
+@lru_cache
+def grupo_de() -> dict[str, str]:
+    g = json.loads((DATOS_DIR / "grupos_competencias.json").read_text(encoding="utf-8"))["grupos"]
+    return {c: grupo for grupo, lista in g.items() for c in lista}
+
+
+def agrupar(competencias: list[str]) -> dict[str, list[str]]:
+    out: dict[str, list[str]] = {}
+    for c in competencias:
+        out.setdefault(grupo_de().get(c, "Otras competencias"), []).append(c)
+    return out

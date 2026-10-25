@@ -1,0 +1,52 @@
+{
+ "Lenguajes de programación": [
+  "Un lenguaje de programación es la forma de darle instrucciones a un computador. Python se usa en datos e inteligencia artificial; JavaScript, en páginas web. Lo esencial en todos: variables (guardan datos), condiciones (si pasa algo, haz esto) y ciclos (repite).",
+  "Ejemplo en Python:\nedad = 20\nif edad >= 18:\n    print('Puedes trabajar')\nAquí 'edad' es una variable, 'if' es una condición y 'print' muestra un mensaje.",
+  "Mini reto: escribe en un papel cómo le dirías a un computador que sume las ventas de 7 días. Pista: una variable 'total', un ciclo que recorra los días y una suma. Luego pruébalo gratis en el curso de la academia."
+ ],
+ "Bases de datos SQL": [
+  "Una base de datos guarda información ordenada en tablas, como una hoja de cálculo muy poderosa. SQL es el idioma para pedirle datos.",
+  "Ejemplo: SELECT nombre, ciudad FROM clientes WHERE ciudad = 'Neiva';\nEsto trae el nombre y la ciudad de los clientes de Neiva.",
+  "Mini reto: escribe la consulta para traer los productos con precio mayor a 50.000. Pista: usa WHERE precio > 50000."
+ ],
+ "Análisis de datos": [
+  "Analizar datos es convertir números en decisiones. Pasos: preguntar, recoger datos, limpiarlos, analizarlos y contar la historia con un gráfico.",
+  "Ejemplo: una tienda de Neiva ve que vende más los viernes. Con ese dato decide tener más personal ese día. Eso es análisis de datos.",
+  "Mini reto: anota tus gastos de una semana, sácales el promedio por día y mira en qué día gastas más. ¡Ya hiciste tu primer análisis!"
+ ],
+ "Ciberseguridad": [
+  "La ciberseguridad protege personas y empresas de ataques digitales. El eslabón más débil casi siempre es una persona que hace clic donde no debe.",
+  "Ejemplo: te llega un correo de 'tu banco' pidiendo tu clave con urgencia. El remitente es raro y el enlace no lleva al sitio oficial: es phishing. ORI siempre dice: ante la duda, no hagas clic.",
+  "Mini reto: revisa tus cuentas principales (correo, WhatsApp, banco) y activa la verificación en dos pasos en todas."
+ ],
+ "Inteligencia artificial": [
+  "La inteligencia artificial son programas que aprenden de datos para predecir, clasificar o generar contenido. Yo, NOVA, soy un ejemplo.",
+  "Ejemplo: un modelo aprende de miles de correos marcados como spam y luego reconoce solo los nuevos. Aprende de ejemplos, no de reglas escritas a mano.",
+  "Mini reto: piensa en una tarea repetitiva de un negocio de tu barrio que la IA podría ayudar a hacer. Escríbela: es tu primera idea de proyecto."
+ ],
+ "Excel avanzado": [
+  "Excel avanzado es dominar fórmulas, tablas dinámicas y gráficos para resumir información rápido. Es de lo más pedido en oficinas.",
+  "Ejemplo: =SUMAR.SI(B2:B100;\"Neiva\";C2:C100) suma las ventas solo de Neiva. Una tabla dinámica hace lo mismo arrastrando campos.",
+  "Mini reto: crea una tabla con 10 ventas (ciudad y valor) y haz una tabla dinámica que muestre el total por ciudad."
+ ],
+ "Inglés B1+": [
+  "El nivel B1 te permite conversar sobre temas de trabajo, entender instrucciones y escribir correos sencillos. Abre la puerta a empleos remotos.",
+  "Ejemplo de entrevista: 'Tell me about yourself' → 'I am a systems technologist from Neiva. I enjoy solving problems and I am learning data analysis.'",
+  "Mini reto: graba un audio de 30 segundos presentándote en inglés y escúchalo. Repite cada día y notarás el avance."
+ ],
+ "Comunicación asertiva": [
+  "Ser asertivo es decir lo que piensas con respeto, sin agredir ni quedarte callado. Las empresas lo valoran muchísimo.",
+  "Ejemplo: en vez de '¡Siempre me dejas todo a mí!', di 'Me siento cargado con estas tareas; ¿podemos repartirlas mejor?'.",
+  "Mini reto: piensa en una situación incómoda reciente y reescribe lo que dijiste con la fórmula: hecho + cómo me siento + qué propongo."
+ ],
+ "Servicio al cliente": [
+  "Un buen servicio al cliente resuelve el problema y deja a la persona con ganas de volver. La clave: escuchar, entender y solucionar.",
+  "Ejemplo: un cliente molesto. 1) Escucha sin interrumpir. 2) 'Entiendo su molestia'. 3) Propón una solución concreta y un plazo.",
+  "Mini reto: practica el escenario Atención al cliente en la sección de Realidad virtual."
+ ],
+ "Marketing digital": [
+  "El marketing digital es atraer clientes por internet: redes sociales, contenido, anuncios y análisis de resultados.",
+  "Ejemplo: una panadería publica un video de 15 segundos sacando el pan del horno a las 6 a. m. Con poco dinero llega a cientos de vecinos.",
+  "Mini reto: elige un negocio pequeño y escribe 3 ideas de publicaciones para esta semana."
+ ]
+}

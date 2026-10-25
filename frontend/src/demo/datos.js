@@ -145,8 +145,8 @@ export default {
    "nivel": "básico",
    "horas": 40,
    "modalidad": "virtual",
-   "proveedor": "SENA Sofia Plus",
-   "url": "https://oferta.senasofiaplus.edu.co",
+   "proveedor": "Orion Nova Academy",
+   "url": "https://academy.orionnovatechnologies.com",
    "gratuito": true,
    "id": 1
   },
@@ -211,8 +211,8 @@ export default {
    "nivel": "intermedio",
    "horas": 120,
    "modalidad": "virtual",
-   "proveedor": "SENA Sofia Plus",
-   "url": "https://oferta.senasofiaplus.edu.co",
+   "proveedor": "Orion Nova Academy",
+   "url": "https://academy.orionnovatechnologies.com",
    "gratuito": true,
    "id": 7
   },
@@ -233,8 +233,8 @@ export default {
    "nivel": "básico",
    "horas": 40,
    "modalidad": "virtual",
-   "proveedor": "SENA Sofia Plus",
-   "url": "https://oferta.senasofiaplus.edu.co",
+   "proveedor": "Orion Nova Academy",
+   "url": "https://academy.orionnovatechnologies.com",
    "gratuito": true,
    "id": 9
   },
@@ -244,8 +244,8 @@ export default {
    "nivel": "intermedio",
    "horas": 30,
    "modalidad": "virtual",
-   "proveedor": "SENA Sofia Plus",
-   "url": "https://oferta.senasofiaplus.edu.co",
+   "proveedor": "Orion Nova Academy",
+   "url": "https://academy.orionnovatechnologies.com",
    "gratuito": true,
    "id": 10
   },

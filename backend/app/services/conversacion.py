@@ -10,7 +10,7 @@ from . import mercado
 CHISTES = [
     "¿Por qué el currículum fue al gimnasio? Porque quería verse más competente. 😄",
     "Mi jefe me dijo que pensara fuera de la caja… pero yo soy un robot, ¡vivo en la nube! ☁️",
-    "¿Qué le dijo la entrevista a la hoja de vida? «Te veo en la segunda ronda». 😉",
+    "¿Qué le dijo la entrevista a la hoja de vida? Te veo en la segunda ronda. 😉",
 ]
 SUG = ["¿Qué competencias me faltan?", "Estudio ingeniería de sistemas", "Muéstrame el desempleo en mi departamento", "Cuéntame un chiste"]
 
@@ -69,7 +69,7 @@ async def conversar_nova(msg: str, datos: dict) -> dict | None:
         return {"texto": f"¡{carrera['nombre']}, buena elección{tu}! 🎓\nPerfil: {carrera['perfil']}\n"
                          f"Competencias de la carrera: {', '.join(carrera['competencias'])}.\n"
                          f"Además el mercado está pidiendo: {', '.join(top)}.\n"
-                         "En «Brechas y rutas» marcas lo que ya dominas y te digo exactamente qué te falta.",
+                         "En Brechas y rutas marcas lo que ya dominas y te digo exactamente qué te falta.",
                 "datos": {"carrera_detectada": carrera["id"],
                           "acciones": [{"label": f"Evaluar mis brechas en {carrera['nombre']}", "href": f"#/brechas?carrera={carrera['id']}"}]}}
     return None

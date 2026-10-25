@@ -5,7 +5,12 @@
 import CARRERAS from '../../../database/datos/carreras.json'
 import TERR from '../../../database/datos/territorios.json'
 import INDICADORES from '../../../database/datos/indicadores_dane.json'
+import LECCIONES from '../../../database/datos/lecciones.json'
+import GRUPOS from '../../../database/datos/grupos_competencias.json'
 import D from './datos.js'
+
+export const ACADEMIA = 'https://academy.orionnovatechnologies.com'
+export const GRUPO_DE = Object.fromEntries(Object.entries(GRUPOS.grupos).flatMap(([g, l]) => l.map((c) => [c, g])))
 
 export const norm = (t) => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
 export { CARRERAS }
@@ -103,7 +108,7 @@ const NIVEL = { 'básico': 1, intermedio: 2, avanzado: 3 }
 export const rutaPara = (br, lim = 6) => br.slice(0, lim).map((b) => {
   const cursos = D.cursos.filter((c) => c.competencia === b.competencia).sort((a, c) => (c.gratuito - a.gratuito) || (NIVEL[a.nivel] - NIVEL[c.nivel]))
   return { competencia: b.competencia, prioridad: b.prioridad,
-    cursos: cursos.length ? cursos : [{ id: 'sena-' + norm(b.competencia), titulo: `Buscar «${b.competencia}» en SENA Sofia Plus`, nivel: 'básico', horas: 40, modalidad: 'virtual', proveedor: 'SENA Sofia Plus', url: 'https://oferta.senasofiaplus.edu.co', gratuito: true, sugerido: true }] }
+    cursos: cursos.length ? cursos : [{ id: 'academia-' + norm(b.competencia), titulo: `${b.competencia} en Orion Nova Academy`, nivel: 'básico', horas: 30, modalidad: 'virtual', proveedor: 'Orion Nova Academy', url: ACADEMIA, gratuito: true, sugerido: true }] }
 })
 
 export function emparejar(competencias, territorios) {
@@ -118,7 +123,7 @@ export function emparejar(competencias, territorios) {
 const CHISTES = [
   '¿Por qué el currículum fue al gimnasio? Porque quería verse más competente. 😄',
   'Mi jefe me dijo que pensara fuera de la caja… pero yo soy un robot, ¡vivo en la nube! ☁️',
-  '¿Qué le dijo la entrevista a la hoja de vida? «Te veo en la segunda ronda». 😉',
+  '¿Qué le dijo la entrevista a la hoja de vida? Te veo en la segunda ronda. 😉',
 ]
 const elegir = (a) => a[Math.floor(Math.random() * a.length)]
 const capital = (s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
@@ -162,8 +167,65 @@ export function conversarNova(msg, datos = {}) {
   if (carrera && /\b(estudio|estudie|carrera|soy|quiero estudiar|me gradue|egresad|perfil|profesion|programa)\b|ingenier|licenciad|tecnolog|tecnic/.test(t)) {
     const r = brechas({ competencias: [], carrera, territorios: [datos.municipio, datos.departamento, 'Nacional'].filter(Boolean) })
     const top = r.brechas.filter((b) => b.tipo === 'Pide el mercado').slice(0, 3).map((b) => b.competencia)
-    return { texto: `¡${carrera.nombre}, buena elección${tu}! 🎓\nPerfil: ${carrera.perfil}\nCompetencias de la carrera: ${carrera.competencias.join(', ')}.\nAdemás el mercado está pidiendo: ${top.join(', ')}.\nEn «Brechas y rutas» marcas lo que ya dominas y te digo exactamente qué te falta.`,
+    return { texto: `¡${carrera.nombre}, buena elección${tu}! 🎓\nPerfil: ${carrera.perfil}\nCompetencias de la carrera: ${carrera.competencias.join(', ')}.\nAdemás el mercado está pidiendo: ${top.join(', ')}.\nEn Brechas y rutas marcas lo que ya dominas y te digo exactamente qué te falta.`,
       datos: { carrera_detectada: carrera.id, acciones: [{ label: `Evaluar mis brechas en ${carrera.nombre}`, href: `#/brechas?carrera=${carrera.id}` }] } }
   }
   return null
+}
+
+// ---------------- Clases con NOVA ----------------
+export const TEMAS = Object.keys(LECCIONES)
+export function detectarTema(texto) {
+  const t = norm(texto)
+  const alias = { python: 'Lenguajes de programación', javascript: 'Lenguajes de programación', programacion: 'Lenguajes de programación', programar: 'Lenguajes de programación',
+    sql: 'Bases de datos SQL', 'base de datos': 'Bases de datos SQL', datos: 'Análisis de datos', seguridad: 'Ciberseguridad', hacker: 'Ciberseguridad',
+    ia: 'Inteligencia artificial', 'inteligencia artificial': 'Inteligencia artificial', excel: 'Excel avanzado', ingles: 'Inglés B1+', english: 'Inglés B1+',
+    asertiv: 'Comunicación asertiva', comunicacion: 'Comunicación asertiva', cliente: 'Servicio al cliente', marketing: 'Marketing digital', redes: 'Marketing digital' }
+  return TEMAS.find((x) => t.includes(norm(x))) || Object.entries(alias).find(([k]) => new RegExp(`\\b${k}`).test(t))?.[1] || null
+}
+export function clase(tema, paso = 0) {
+  const partes = LECCIONES[tema]
+  const titulos = ['📘 Concepto', '💡 Ejemplo', '🎯 Mini reto']
+  const fin = paso >= partes.length - 1
+  return { texto: `Clase con NOVA · ${tema} (${paso + 1}/${partes.length})\n${titulos[paso]}\n${partes[paso]}` + (fin ? '\n\n¡Terminaste la clase! 🎉 Sigue con el curso completo en Orion Nova Academy.' : ''),
+    datos: { sugerencias: fin ? ['Quiero otra clase', 'Evaluar mis conocimientos'] : [`Continuar clase de ${tema} (${paso + 2}/${partes.length})`],
+      acciones: fin ? [{ label: 'Ir a Orion Nova Academy', href: ACADEMIA }] : [] } }
+}
+
+// ---------------- Revisión de hoja de vida ----------------
+const SINONIMOS_CV = { python: 'Lenguajes de programación', javascript: 'Lenguajes de programación', java: 'Lenguajes de programación', react: 'Lenguajes de programación',
+  'c#': 'Lenguajes de programación', php: 'Lenguajes de programación', sql: 'Bases de datos SQL', mysql: 'Bases de datos SQL', postgres: 'Bases de datos SQL',
+  excel: 'Excel avanzado', 'power bi': 'Power BI', ingles: 'Inglés B1+', english: 'Inglés B1+', 'atencion al cliente': 'Servicio al cliente',
+  ventas: 'Ventas', 'redes sociales': 'Marketing digital', aws: 'Computación en la nube', azure: 'Computación en la nube', docker: 'DevOps', git: 'Ingeniería de software',
+  scrum: 'Metodologías ágiles', arduino: 'IoT y electrónica', autocad: 'Diseño CAD', 'trabajo en equipo': 'Trabajo en equipo', liderazgo: 'Comunicación asertiva', siigo: 'Software contable', contabilidad: 'Contabilidad básica', contable: 'Contabilidad básica', auditoria: 'Auditoría' }
+const TODAS_COMP = Object.keys(GRUPO_DE)
+
+export function analizarHojaVida(texto, carreraId = null) {
+  const t = ' ' + norm(texto) + ' '
+  const encontradas = new Set(TODAS_COMP.filter((c) => t.includes(norm(c))))
+  Object.entries(SINONIMOS_CV).forEach(([k, v]) => { if (t.includes(k)) encontradas.add(v) })
+  const carrera = carreraPorId(carreraId) || detectarCarrera(texto)
+  const secciones = [
+    ['Perfil profesional', /perfil|resumen|acerca de mi|sobre mi|objetivo/],
+    ['Experiencia laboral', /experiencia|laboral|empresa|cargo/],
+    ['Formación académica', /formacion|educacion|estudios|universidad|sena|bachiller|tecnolog/],
+    ['Habilidades', /habilidades|competencias|conocimientos|herramientas/],
+    ['Idiomas', /idioma|ingles|english/],
+    ['Datos de contacto', /@|telefono|celular|\b3\d{9}\b|\b3\d{2} \d{3} \d{4}\b/],
+  ]
+  const faltanSecciones = secciones.filter(([, re]) => !re.test(t)).map(([n]) => n)
+  const logros = (texto.match(/\d+\s?%|\$\s?\d|\d+\s?(clientes|ventas|proyectos|personas|usuarios)/gi) || []).length
+  const palabras = texto.trim().split(/\s+/).length
+  const mejorar = []
+  if (faltanSecciones.length) mejorar.push(`Agrega estas secciones: ${faltanSecciones.join(', ')}.`)
+  if (!logros) mejorar.push('Escribe logros medibles (por ejemplo: aumenté las ventas un 15 % o atendí 40 clientes al día).')
+  if (palabras < 150) mejorar.push('Tu hoja de vida es muy corta; describe mejor tus funciones y resultados.')
+  if (palabras > 900) mejorar.push('Es muy larga; resúmela en 1 o 2 páginas.')
+  if (!/linkedin|github|portafolio|portfolio/.test(t)) mejorar.push('Incluye un enlace a LinkedIn, GitHub o portafolio.')
+  const objetivo = carrera ? [...carrera.competencias, ...carrera.mercado, ...carrera.transversales]
+    : demandaLista(['Nacional']).slice(0, 10).map((d) => d.competencia)
+  const fortalecer = objetivo.filter((c) => !encontradas.has(c))
+  const puntaje = Math.max(10, Math.min(100, Math.round(100 - faltanSecciones.length * 8 - (logros ? 0 : 12) - fortalecer.length * 3 + Math.min(encontradas.size, 10) * 2)))
+  return { puntaje, carrera: carrera ? { id: carrera.id, nombre: carrera.nombre } : null, encontradas: [...encontradas].sort(),
+    fortalecer, mejorar, palabras }
 }

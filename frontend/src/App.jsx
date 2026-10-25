@@ -44,12 +44,23 @@ export default function App() {
           <span><strong>EmpleoTech 360 IA</strong><small>Orion Nova Technologies</small></span>
         </a>
         <nav className="menu" aria-label="Principal">
-          {Object.entries(RUTAS).map(([k, [titulo]]) => (
-            <a key={k} href={`#/${k}`} className={ruta === k ? 'activo' : ''}>
-              {k === 'cuenta' && usuario ? usuario.nombre.split(' ')[0] : titulo}
-            </a>
+          {Object.entries(RUTAS).filter(([k]) => k !== 'cuenta' || usuario).map(([k, [titulo]]) => (
+            <a key={k} href={`#/${k}`} className={ruta === k ? 'activo' : ''}>{titulo}</a>
           ))}
         </nav>
+        <div className="acceso-botones">
+          {usuario ? (
+            <>
+              <a className="usuario-chip" href="#/cuenta" title="Mi cuenta">👤 {usuario.nombre.split(' ')[0]}</a>
+              <button className="btn btn-sec btn-peq" onClick={() => { sesion.cerrar(); setUsuario(null); window.location.hash = '#/inicio' }}>Cerrar sesión</button>
+            </>
+          ) : (
+            <>
+              <a className="btn btn-sec btn-peq" href="#/cuenta?modo=login">Iniciar sesión</a>
+              <a className="btn btn-peq" href="#/cuenta?modo=registro">Registrarse</a>
+            </>
+          )}
+        </div>
       </header>
 
       {MODO_DEMO && (

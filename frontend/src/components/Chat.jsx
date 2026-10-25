@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { hablarConAgente } from '../api.js'
 import { NovaAvatar, OriAvatar } from './Avatares.jsx'
 import { callar, cambiarVoz, gesto, hablar, hayVoz, vozActiva } from './vida.js'
+import { leerHojaVida } from './leerArchivo.js'
 
 const recordar = {
   get(k) { try { return localStorage.getItem('empleotech.' + k) || '' } catch { return '' } },
@@ -36,16 +37,18 @@ export default function Chat({ agente = 'nova', nombre = 'NOVA', competencias = 
   const [voz, setVoz] = useState(vozActiva())
   const [escuchando, setEscuchando] = useState(false)
   const fin = useRef(null)
+  const archivo = useRef(null)
+  const [leyendo, setLeyendo] = useState(false)
   const esOri = agente === 'ori'
 
-  const enviar = async (msg, extra = {}) => {
-    if (!msg.trim() && !extra.respuestas && mensajes.length) return
+  const enviar = async (msg, extra = {}, destino = agente) => {
+    if (!msg.trim() && !extra.respuestas && !extra.hoja_vida_texto && mensajes.length) return
     if (msg.trim()) setMensajes((m) => [...m, { de: 'yo', texto: msg }])
     setTexto(''); setCargando(true)
     gesto(esOri ? 'ori' : 'nova', esOri ? 'scan' : 'asiente')
     try {
       const datos = { competencias, nombre: recordar.get('nombre'), carrera: recordar.get('carrera'), ...extra }
-      const r = await hablarConAgente(agente, msg, { territorio, datos })
+      const r = await hablarConAgente(destino, msg, { territorio, datos })
       if (r.datos?.nombre_detectado) recordar.set('nombre', r.datos.nombre_detectado)
       if (r.datos?.carrera_detectada) recordar.set('carrera', r.datos.carrera_detectada)
       setMensajes((m) => [...m, { de: r.agente, nombre: r.nombre, texto: r.texto, datos: r.datos, bloqueado: r.bloqueado }])
@@ -71,6 +74,17 @@ export default function Chat({ agente = 'nova', nombre = 'NOVA', competencias = 
     rec.onend = () => setEscuchando(false)
     rec.onresult = (e) => enviar(e.results[0][0].transcript)
     rec.start()
+  }
+
+  const pideHojaVida = agente === 'hoja_vida' || mensajes.some((m) => m.datos?.pedir_hoja_vida)
+  const subir = async (e) => {
+    const f = e.target.files?.[0]; e.target.value = ''
+    if (!f) return
+    setMensajes((m) => [...m, { de: 'yo', texto: `📎 ${f.name}` }]); setLeyendo(true)
+    try {
+      const texto = await leerHojaVida(f)
+      await enviar('', { hoja_vida_texto: texto }, 'hoja_vida')
+    } catch (err) { setMensajes((m) => [...m, { de: 'error', texto: err.message }]) } finally { setLeyendo(false) }
   }
 
   const alternarVoz = () => { const n = !voz; setVoz(n); cambiarVoz(n); if (n) hablar('Listo, vuelvo a hablar.', esOri ? 'ori' : 'nova') }
@@ -102,13 +116,20 @@ export default function Chat({ agente = 'nova', nombre = 'NOVA', competencias = 
             )}
           </div>
         ))}
-        {cargando && <div className="msj bot escribiendo"><span /><span /><span /></div>}
+        {pideHojaVida && (
+          <div className="subir-cv">
+            <input ref={archivo} type="file" accept=".pdf,.docx,.txt" hidden onChange={subir} />
+            <button type="button" className="btn" disabled={leyendo} onClick={() => archivo.current?.click()}>{leyendo ? 'Leyendo tu hoja de vida…' : '📎 Subir mi hoja de vida'}</button>
+            <span className="tenue">PDF, Word o texto · máx. 5 MB · se lee en tu navegador y no se guarda</span>
+          </div>
+        )}
+        {(cargando || leyendo) && <div className="msj bot escribiendo"><span /><span /><span /></div>}
         <div ref={fin} />
       </div>
       <form className="chat-entrada" onSubmit={(e) => { e.preventDefault(); enviar(texto) }}>
         <button type="button" className={`btn-icono ${escuchando ? 'escuchando' : ''}`} title="Hablarle por voz" aria-label="Hablarle por voz" onClick={escuchar}>🎙️</button>
         <input value={texto} onChange={(e) => setTexto(e.target.value)} maxLength={4000}
-          placeholder={escuchando ? 'Te escucho…' : `Escríbele a ${nombre.split(' ·')[0]}…`} aria-label="Mensaje" />
+          placeholder={escuchando ? 'Te escucho…' : `Escríbele a ${agente === 'tutor' ? 'NOVA' : nombre.split(' ·')[0]}…`} aria-label="Mensaje" />
         <button className="btn" disabled={!texto.trim()}>Enviar</button>
       </form>
     </div>

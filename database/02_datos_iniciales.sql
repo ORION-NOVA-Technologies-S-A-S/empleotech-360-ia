@@ -132,16 +132,16 @@ insert into competencias_demandadas (competencia, sector, territorio, demanda, t
 on conflict do nothing;
 
 insert into cursos (titulo, competencia, nivel, horas, modalidad, proveedor, url, gratuito) values
-  ('Python desde cero','Lenguajes de programación','básico',40,'virtual','SENA Sofia Plus','https://oferta.senasofiaplus.edu.co',true),
+  ('Python desde cero','Lenguajes de programación','básico',40,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
   ('React para principiantes','Lenguajes de programación','básico',30,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
   ('Análisis de datos con Python','Análisis de datos','intermedio',48,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',false),
   ('Fundamentos de ciberseguridad con ORI','Ciberseguridad','básico',24,'mixta','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
   ('IA aplicada a negocios','Inteligencia artificial','intermedio',36,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',false),
   ('Laboratorio IoT con sensores','IoT y electrónica','básico',30,'vr','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
-  ('Inglés para el trabajo','Inglés B1+','intermedio',120,'virtual','SENA Sofia Plus','https://oferta.senasofiaplus.edu.co',true),
+  ('Inglés para el trabajo','Inglés B1+','intermedio',120,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
   ('Atención al cliente en VR','Servicio al cliente','básico',12,'vr','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
-  ('Marketing digital práctico','Marketing digital','básico',40,'virtual','SENA Sofia Plus','https://oferta.senasofiaplus.edu.co',true),
-  ('Excel avanzado','Excel avanzado','intermedio',30,'virtual','SENA Sofia Plus','https://oferta.senasofiaplus.edu.co',true),
+  ('Marketing digital práctico','Marketing digital','básico',40,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
+  ('Excel avanzado','Excel avanzado','intermedio',30,'virtual','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
   ('Comunicación asertiva','Comunicación asertiva','básico',10,'vr','Orion Nova Academy','https://academy.orionnovatechnologies.com',true),
   ('Seguridad industrial en VR','Seguridad industrial (HSE)','básico',20,'vr','Orion Nova Academy','https://academy.orionnovatechnologies.com',true)
 on conflict do nothing;

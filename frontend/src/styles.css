@@ -270,3 +270,28 @@ th { background: var(--fondo-2); color: var(--tenue); font-weight: 600; }
 .chip-detalle { color: var(--tenue); font-size: .75rem; }
 .chip.on .chip-detalle { color: #dfe6ff; }
 @media (max-width: 860px) { .grupo-comp { grid-template-columns: 1fr; gap: 0; } }
+
+/* Subir hoja de vida */
+.subir-cv { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px; border: 1px dashed var(--azul); border-radius: 14px; background: rgba(79, 125, 255, .08); }
+.subir-cv .tenue { font-size: .8rem; }
+
+/* Acceso: Iniciar sesión / Registrarse */
+.acceso-botones { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.btn-peq { padding: 8px 14px; font-size: .86rem; }
+.btn-ancho { width: 100%; }
+.usuario-chip { color: var(--texto); text-decoration: none; font-size: .9rem; padding: 6px 10px; border-radius: 999px; background: var(--panel); border: 1px solid var(--borde); }
+.acceso { display: grid; grid-template-columns: 1fr minmax(300px, 460px); gap: 34px; align-items: center; max-width: 920px; margin: 0 auto; }
+.acceso-lado { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: left; }
+.acceso-lado .burbuja-personaje { max-width: 340px; }
+.acceso-nova { display: flex; align-items: center; gap: 10px; color: var(--plata); font-size: .9rem; }
+.acceso h1 { font-size: 1.7rem; }
+.centro { text-align: center; }
+.fuerza { display: flex; align-items: center; gap: 10px; margin: -6px 0 10px; font-size: .8rem; color: var(--tenue); }
+.fuerza > div { height: 6px; border-radius: 99px; flex: 0 0 auto; max-width: 70%; min-width: 6%; transition: width .3s; }
+.fuerza-barra.n0, .fuerza-barra.n1 { background: var(--rojo); } .fuerza-barra.n2 { background: var(--ambar); } .fuerza-barra.n3, .fuerza-barra.n4 { background: var(--verde); }
+@media (max-width: 860px) { .acceso { grid-template-columns: 1fr; } .acceso-botones { justify-content: flex-end; } }
+
+/* Cabecera compacta para que quepan menú y acceso */
+.menu { flex: 1; min-width: 0; }
+.menu a { padding: 7px 9px; font-size: .86rem; }
+@media (max-width: 1280px) { .marca small { display: none; } }
