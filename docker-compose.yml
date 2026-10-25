@@ -1,0 +1,58 @@
+# EmpleoTech 360 IA · Orion Nova Technologies
+# Local completo:   docker compose --profile local up -d --build
+# Con Supabase:     (DATABASE_URL en .env apuntando a Supabase)  docker compose up -d --build
+services:
+  db:
+    profiles: ["local"]
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: empleotech
+      POSTGRES_USER: empleotech
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-empleotech}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./database/02_seed_ejemplo.sql:/docker-entrypoint-initdb.d/02_seed_ejemplo.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U empleotech -d empleotech"]
+      interval: 5s
+      retries: 10
+
+  postgrest:
+    profiles: ["local"]
+    image: postgrest/postgrest:v12.2.3
+    restart: unless-stopped
+    environment:
+      PGRST_DB_URI: postgres://empleotech:${POSTGRES_PASSWORD:-empleotech}@db:5432/empleotech
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: web_anon
+    depends_on:
+      db: { condition: service_healthy }
+    ports: ["3000:3000"]
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db: { condition: service_healthy, required: false }
+    ports: ["8000:8000"]
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on: [backend]
+    ports: ["8080:80"]
+
+  mqtt:
+    profiles: ["iot"]
+    image: eclipse-mosquitto:2
+    restart: unless-stopped
+    volumes:
+      - ./iot/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./iot/passwd:/mosquitto/config/passwd:ro
+    ports: ["1883:1883"]
+
+volumes:
+  pgdata:

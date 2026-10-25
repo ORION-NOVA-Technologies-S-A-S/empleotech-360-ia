@@ -1,0 +1,32 @@
+name: Verificar backend
+on: [push, pull_request]
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env: { POSTGRES_PASSWORD: prueba, POSTGRES_DB: empleotech }
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Esquema y datos de ejemplo
+        env: { PGPASSWORD: prueba }
+        run: |
+          psql -h localhost -U postgres -d empleotech -v ON_ERROR_STOP=1 -f database/01_schema.sql
+          psql -h localhost -U postgres -d empleotech -v ON_ERROR_STOP=1 -f database/02_seed_ejemplo.sql
+      - name: Instalar y arrancar la API
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://postgres:prueba@localhost:5432/empleotech
+          JWT_SECRET: clave-de-prueba-solo-para-ci-0123456789
+        run: |
+          pip install -r requirements.txt
+          uvicorn app.main:app --port 8000 &
+          sleep 6
+          curl -fsS localhost:8000/api/salud
+          curl -fsS localhost:8000/api/agentes | python -c "import json,sys; a=json.load(sys.stdin); assert len(a)==17, len(a); print('17 agentes OK')"
+          curl -fsS -X POST localhost:8000/api/agentes/nova -H 'Content-Type: application/json' -d '{"mensaje":"¿Qué competencias me faltan?","datos":{"competencias":["Programación Python"]}}'
